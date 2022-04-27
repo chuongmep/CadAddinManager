@@ -53,7 +53,9 @@ Some feature include:
 
 Execute a command easily  :
  1. Create a class library use .NET
+
  2. Add library Autocad API or Civil3D API
+
  3. Create a command, example:
 
  ```cs
@@ -64,7 +66,9 @@ Execute a command easily  :
     }
  ```
  4.Load To Add-in Manager.
+
  5.Double click to run command.
+ 
  6.Use faceless when you change code or rebuild.
 ---
 
