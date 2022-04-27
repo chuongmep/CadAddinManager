@@ -104,9 +104,8 @@ and [dotUltimate](https://www.jetbrains.com/dotnet/) tools, which both make open
 ## Credits
 
 - Credit to [Chuongmep](https://github.com/chuongmep)
-- Credit to [icons8.com](https://icons8.com) for the Navis Add-in Manager icons.
+- Credit to [icons8.com](https://icons8.com) for the Cad Add-in Manager icons.
 - Credit to [Nice3point](https://github.com/Nice3point) for the CI/CD template.
-- Website helped me resize icon : [https://resizeappicon.com/](https://resizeappicon.com/)
 
 ## Learning Resources
 
