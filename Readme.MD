@@ -36,6 +36,11 @@ Some feature include:
     - AddInManager Manual : Use for normal process load/unload addin
     - AddInManager Faceless : use for load last process before addin without UI
 - Allow user know whether plugin can load successfully or not.
+- No depend on any library from outside **Autocad** & **Civil3D**.
+- <kbd>F5</kbd> - Load fresh plugin don't need load again.
+- <kbd>F1</kbd> - Go link open source report some error,bug or feature request.
+- <kbd>Delete</kbd> - Quick remove by use right click or use from keyboard.
+- <kbd>Crt + MouseWheel</kbd> - Zoom in/out by use mouse wheel in command plugin.
 
 ## Add-In Manager
 
@@ -46,6 +51,21 @@ Some feature include:
 - [x] AddInManagerManual
 - [x] AddInManagerFaceless
 
+Execute a command easily  :
+ 1. Create a class library use .NET
+ 2. Add library Autocad API or Civil3D API
+ 3. Create a command, example:
+
+ ```cs
+    [CommandMethod("DoSomething")]
+    public void Execute()
+    {
+        // do some thing code here
+    }
+ ```
+ 4.Load To Add-in Manager.
+ 5.Double click to run command.
+ 6.Use faceless when you change code or rebuild.
 ---
 
 ## Installation
