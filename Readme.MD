@@ -68,8 +68,9 @@ Execute a command easily  :
  4.Load To Add-in Manager.
 
  5.Double click to run command.
- 
+
  6.Use faceless when you change code or rebuild.
+ 
 ---
 
 ## Installation
