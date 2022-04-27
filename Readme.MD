@@ -70,7 +70,7 @@ Execute a command easily  :
  5.Double click to run command.
 
  6.Use faceless when you change code or rebuild.
- 
+
 ---
 
 ## Installation
@@ -134,5 +134,5 @@ and [dotUltimate](https://www.jetbrains.com/dotnet/) tools, which both make open
 
 ## Learning Resources
 
-- <a href=" https://adndevblog.typepad.com/autocad/" target="_blank">ADN Dev Blog</a>
+- <a href="https://adndevblog.typepad.com/autocad/" target="_blank">ADN Dev Blog</a>
 - <a href="https://www.autodesk.com/developer-network/platform-technologies/autocad" target="_blank">AutoCAD Developer Center</a> 
