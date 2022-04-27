@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWpf>true</UseWpf>
+    <Configurations>Debug A22;Debug A23</Configurations>
+    <Configurations>$(Configurations);Release A20;Release A21;Release A22;Release A23</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('N20'))">
+    <CADVersion>2020</CADVersion>
+    <DefineConstants>$(DefineConstants);A20</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('N21'))">
+    <CADVersion>2021</CADVersion>
+    <DefineConstants>$(DefineConstants);A21</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('N22'))">
+    <CADVersion>2022</CADVersion>
+    <DefineConstants>$(DefineConstants);A22</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('N23'))">
+    <CADVersion>2023</CADVersion>
+    <DefineConstants>$(DefineConstants);A23</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Version>$(CADVersion)</Version>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Description>A Project Support for developer in Autocad And Civil3D </Description>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishTrimmed>true</PublishTrimmed>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Chuongmep.Acad.Api.accoremgd" Version="$(CADVersion).*" />
+    <PackageReference Include="Chuongmep.Acad.Api.acdbmgd" Version="$(CADVersion).*" />
+  </ItemGroup>
+
+</Project>
