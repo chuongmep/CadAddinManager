@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CadAddinManager", "CadAddinManager\CadAddinManager.csproj", "{E05305A7-28E1-4658-B505-E035FEDDD266}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "TestVB", "TestVB\TestVB.vbproj", "{C736FCE7-CAE8-474B-8A55-672BC5C1F39B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug A23|Any CPU = Debug A23|Any CPU
@@ -42,6 +44,11 @@ Global
 		{E05305A7-28E1-4658-B505-E035FEDDD266}.Installer|Any CPU.ActiveCfg = Release A23|Any CPU
 		{E05305A7-28E1-4658-B505-E035FEDDD266}.Release A23|Any CPU.ActiveCfg = Release A23|Any CPU
 		{E05305A7-28E1-4658-B505-E035FEDDD266}.Release A23|Any CPU.Build.0 = Release A23|Any CPU
+		{C736FCE7-CAE8-474B-8A55-672BC5C1F39B}.Debug A23|Any CPU.ActiveCfg = Release A23|Any CPU
+		{C736FCE7-CAE8-474B-8A55-672BC5C1F39B}.Debug A23|Any CPU.Build.0 = Release A23|Any CPU
+		{C736FCE7-CAE8-474B-8A55-672BC5C1F39B}.Installer|Any CPU.ActiveCfg = Release A23|Any CPU
+		{C736FCE7-CAE8-474B-8A55-672BC5C1F39B}.Release A23|Any CPU.ActiveCfg = Release A23|Any CPU
+		{C736FCE7-CAE8-474B-8A55-672BC5C1F39B}.Release A23|Any CPU.Build.0 = Release A23|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
