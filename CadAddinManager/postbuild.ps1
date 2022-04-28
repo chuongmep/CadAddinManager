@@ -4,7 +4,6 @@ Write-Host "Solution Directory:" $SolutionDir
 Write-Host "Project Directory:" $ProjectDir
 Write-Host "Configuration Name Current:" $Configuration
 $bundle = "C:\ProgramData\Autodesk\ApplicationPlugins\CadAddinManager.bundle\"
-$content = "PackageContents.xml"
 $AutodeskProcessName = "acad"
 if($Configuration -match 'Debug A\d\d')
 {
@@ -22,7 +21,6 @@ if($Configuration -match 'Debug A\d\d')
 			Write-Host "Removed All File Exist"
 		}
 		Write-Host "************ Start Copy New File"
-		xcopy ($SolutionDir + $content) $bundle /Y
 		xcopy ($ProjectDir + "*.*") $bundle /Y /I /E /R
 		Write-Host "************ Oh my got ! Copy Complete! Chuongmep.com ＼（＾_＾）／"
 	}
