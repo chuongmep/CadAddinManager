@@ -5,14 +5,13 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 
-namespace Test;
 
 public class CreateComplexLinetype
 {
     // code modified from the link 
 //http://through-the-interface.typepad.com/through_the_interface/2008/01/creating-a-comp.html
 [CommandMethod("CCL")]
-public void CreateComplexLinetype()
+public void CreateComplexLinetypeTest()
 {
     Document doc =
         Application.DocumentManager.MdiActiveDocument;
