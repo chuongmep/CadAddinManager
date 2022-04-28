@@ -106,7 +106,14 @@ public sealed class AddinManagerBase
             }
 
             var instance = Activator.CreateInstance(_activeEc.DeclaringType);
-            _activeEc.Invoke(instance, null);
+            try
+            {
+                _activeEc.Invoke(instance, null);
+            }
+            catch (System.Reflection.TargetInvocationException e)
+            {
+                doc.Editor.WriteMessage(e.Message);
+            }
             //TODO : Bi trung attribute : 
             // https://adndevblog.typepad.com/autocad/2014/01/detecting-net-command-duplicates-programmatically.html               
         }
