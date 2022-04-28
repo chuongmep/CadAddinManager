@@ -53,7 +53,7 @@ namespace Test
 
         {
             string asmPath = SelectAssembly();
-            if (asmPath == null) return;
+            if (string.IsNullOrEmpty(asmPath)) return;
             FindCmdDuplicates(asmPath);
         }
 
@@ -103,7 +103,7 @@ namespace Test
             }
 
 
-            return null;
+            return String.Empty;
         }
 
 

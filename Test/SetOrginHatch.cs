@@ -68,15 +68,17 @@ public class SetOrginHatch
         using (Transaction tr2 = doc.TransactionManager.StartTransaction())
         {
             Entity ent = (Entity) tr2.GetObject(mHatchId, OpenMode.ForWrite);
-            if (ent != null)
             {
-                Hatch nHatch = ent as Hatch;
-                String hatchName = nHatch.PatternName;
+                Hatch? nHatch = ent as Hatch;
+                string? hatchName = nHatch?.PatternName;
                 Point2d setOrigin = new Point2d(6.698, 2.78);
-                nHatch.Origin = setOrigin;
-                nHatch.SetHatchPattern(HatchPatternType.PreDefined, hatchName);
-                nHatch.EvaluateHatch(true);
-                nHatch.Draw();
+                if (nHatch != null)
+                {
+                    nHatch.Origin = setOrigin;
+                    nHatch.SetHatchPattern(HatchPatternType.PreDefined, hatchName);
+                    nHatch.EvaluateHatch(true);
+                    nHatch.Draw();
+                }
             }
 
             tr2.Commit();

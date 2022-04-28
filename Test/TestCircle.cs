@@ -19,14 +19,18 @@ public class TestCircle
         using (var tr = db.TransactionManager.StartTransaction())
         {
             var bt = tr.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
-            var ms = tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
-            var circle = new Autodesk.AutoCAD.DatabaseServices.Circle();
-            Random ran = new Random();
-            int c = ran.Next(0, 100);
-            circle.Center = new Point3d(0, 10, 0);
-            circle.Radius = c;
-            ms.AppendEntity(circle);
-            tr.AddNewlyCreatedDBObject(circle, true);
+            if (bt != null)
+            {
+                var ms = tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+                var circle = new Autodesk.AutoCAD.DatabaseServices.Circle();
+                Random ran = new Random();
+                int c = ran.Next(0, 100);
+                circle.Center = new Point3d(0, 10, 0);
+                circle.Radius = c;
+                ms?.AppendEntity(circle);
+                tr.AddNewlyCreatedDBObject(circle, true);
+            }
+
             tr.Commit();
 
         }
