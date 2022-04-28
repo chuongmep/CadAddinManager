@@ -6,7 +6,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <UseWindowsForms>false</UseWindowsForms>
     <TargetFramework>net48</TargetFramework>
-    <Configurations>Debug A22;Debug A23</Configurations>
+    <Configurations>Debug A23</Configurations>
     <Configurations>$(Configurations);Release A23</Configurations>
     <RootNamespace>CadAddinManager</RootNamespace>
   </PropertyGroup>
