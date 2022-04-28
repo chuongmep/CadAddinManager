@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Net;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Windows;
 using Autodesk.AutoCAD.ApplicationServices;
@@ -38,6 +40,11 @@ public sealed class AddinManagerBase
     public void RunActiveCommand(AddInManagerViewModel vm)
     {
         var filePath = _activeCmd.FilePath;
+        if (!File.Exists(filePath))
+        {
+            MessageBox.Show("File not found: " + filePath);
+            return;
+        }
         try
         {
             vm.AssemLoader.HookAssemblyResolve();
