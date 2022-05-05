@@ -83,9 +83,6 @@ public class AddInManagerViewModel : ViewModelBase
     public ICommand ClearCommand => new RelayCommand(ClearCommandClick);
 
     public ICommand RemoveCommand => new RelayCommand(RemoveAddinClick);
-    public ICommand SaveCommandFolder => new RelayCommand(SaveCommandLocalFolder);
-
-
     private readonly ICommand _executeAddinCommand = null;
     public ICommand ExecuteAddinCommand => _executeAddinCommand ?? new RelayCommand(ExecuteAddinCommandClick);
     public ICommand OpenLcAssemblyCommand => new RelayCommand(OpenLcAssemblyCommandClick);
@@ -156,18 +153,6 @@ public class AddInManagerViewModel : ViewModelBase
     {
         get => isCanRun;
         set => OnPropertyChanged(ref isCanRun, value);
-    }
-
-    private bool isTabStartSelected;
-
-    public bool IsTabStartSelected
-    {
-        get
-        {
-            if (isTabStartSelected) IsCanRun = false;
-            return isTabStartSelected;
-        }
-        set => OnPropertyChanged(ref isTabStartSelected, value);
     }
 
     private void HelpCommandClick()
@@ -263,19 +248,6 @@ public class AddInManagerViewModel : ViewModelBase
         bool flag = MAddinManagerBase.ActiveCmd == null;
         if (flag) return;
         string path = MAddinManagerBase.ActiveCmd.FilePath;
-        if (!File.Exists(path))
-        {
-            ShowFileNotExit(path);
-            return;
-        }
-        Process.Start("explorer.exe", "/select, " + path);
-    }
-
-    private void OpenLcAssemblyAppClick()
-    {
-        bool flag = MAddinManagerBase.ActiveApp == null;
-        if (flag) return;
-        string path = MAddinManagerBase.ActiveApp.FilePath;
         if (!File.Exists(path))
         {
             ShowFileNotExit(path);
@@ -402,27 +374,6 @@ public class AddInManagerViewModel : ViewModelBase
         {
             MessageBox.Show(e.ToString());
         }
-    }
-
-    private void SaveCommandLocalFolder()
-    {
-        SaveFileDialog dlg = new SaveFileDialog();
-        dlg.Filter = "Navis Addin (*.addin)|*.addin";
-        dlg.DefaultExt = "addin";
-        dlg.AddExtension = true;
-        dlg.Title = DefaultSetting.AppName;
-        dlg.ShowDialog();
-        if (!string.IsNullOrEmpty(dlg.FileName))
-        {
-            MAddinManagerBase.AddinManager.SaveAsLocal(this, dlg.FileName);
-            ShowSuccessfully();
-        }
-    }
-
-    private void ShowSuccessfully()
-    {
-        MessageBox.Show(FrmAddInManager, "Save Successfully", DefaultSetting.AppName, MessageBoxButton.OK, MessageBoxImage.Information);
-        FrmAddInManager.Close();
     }
 
     private void FreshSearchClick()
