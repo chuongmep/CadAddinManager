@@ -4,10 +4,12 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Windows;
 using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.Runtime;
 using CadAddinManager.Model;
 using CadAddinManager.View;
 using CadAddinManager.ViewModel;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
+using Exception = System.Exception;
 
 namespace CadAddinManager.Command;
 
@@ -18,11 +20,9 @@ public sealed class AddinManagerBase
         var vm = new AddInManagerViewModel();
         if (_activeCmd != null && faceless)
         {
-            RunActiveCommand(vm);
+            RunActiveCommand();
             return;
         }
-
-        _activeEc = null;
         var FrmAddInManager = new FrmAddInManager(vm);
         FrmAddInManager.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         // Application.ShowModelessWindow(FrmAddInManager);
@@ -37,8 +37,9 @@ public sealed class AddinManagerBase
     }
 
 
-    public void RunActiveCommand(AddInManagerViewModel vm)
+    public void RunActiveCommand()
     {
+        AssemLoader assemLoader = new AssemLoader();
         var filePath = _activeCmd.FilePath;
         if (!File.Exists(filePath))
         {
@@ -47,37 +48,25 @@ public sealed class AddinManagerBase
         }
         try
         {
-            vm.AssemLoader.HookAssemblyResolve();
-            var assembly = vm.AssemLoader.LoadAddinsToTempFolder(filePath, false);
+            
+            assemLoader.HookAssemblyResolve();
+            var assembly = assemLoader.LoadAddinsToTempFolder(filePath, false);
             if (assembly == null) return;
             else
             {
-                _activeTempFolder = vm.AssemLoader.TempFolder;
                 Type[] types = assembly.GetTypes();
                 foreach (Type type in types)
                 {
                     List<MethodInfo> methodInfos = type.GetMethods().ToList();
                     foreach (MethodInfo methodInfo in methodInfos)
                     {
-                        var commandAtt = methodInfo
-                            .GetCustomAttributes(typeof(Autodesk.AutoCAD.Runtime.CommandMethodAttribute), false)
+                        CommandMethodAttribute commandAtt = (CommandMethodAttribute) methodInfo
+                            .GetCustomAttributes(typeof(CommandMethodAttribute), false)
                             .FirstOrDefault();
-                        MessageBox.Show(commandAtt.ToString());
-                        string name2 = $"{methodInfo.DeclaringType.Name}.{methodInfo.Name}";
-                        if (_activeEc != null)
+                        string fullName = string.Join(".", methodInfo.DeclaringType.Name,methodInfo.Name);
+                        if (commandAtt != null && fullName == Instance.ActiveCmdItem.FullClassName)
                         {
-                            string name1 = $"{_activeEc.DeclaringType.Name}.{_activeEc.Name}";
-                            if (name1 == name2)
-                            {
-                                Invoke(methodInfo);
-                            }
-                        }
-
-                        string s = vm.SelectedCommandItem?.Name;
-                        if (commandAtt != null && _activeEc == null && name2 == s)
-                        {
-                            _activeEc = methodInfo;
-                            Invoke(_activeEc);
+                            Invoke(methodInfo);
                         }
                     }
                 }
@@ -85,38 +74,37 @@ public sealed class AddinManagerBase
         }
         catch (Exception e)
         {
-            MessageBox.Show(e.ToString());
+            Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage(e.ToString());
         }
         finally
         {
-            vm.AssemLoader.UnhookAssemblyResolve();
-            vm.AssemLoader.CopyGeneratedFilesBack();
+            assemLoader.UnhookAssemblyResolve();
+            assemLoader.CopyGeneratedFilesBack();
         }
     }
 
     void Invoke(MethodInfo methodInfo)
     {
-        _activeEc = methodInfo;
         Document doc = Application.DocumentManager.MdiActiveDocument;
         using (doc.LockDocument())
         {
-            if (_activeEc.IsStatic)
+            if (methodInfo.IsStatic)
             {
-                _activeEc.Invoke(null, null);
+                methodInfo.Invoke(null, null);
                 return;
             }
-
-            var instance = Activator.CreateInstance(_activeEc.DeclaringType);
             try
             {
-                _activeEc.Invoke(instance, null);
+                if (methodInfo.DeclaringType != null)
+                {
+                    var instance = Activator.CreateInstance(methodInfo.DeclaringType);
+                    methodInfo.Invoke(instance, null);
+                }
             }
             catch (System.Reflection.TargetInvocationException e)
             {
                 doc.Editor.WriteMessage(e.Message);
             }
-            //TODO : Bi trung attribute : 
-            // https://adndevblog.typepad.com/autocad/2014/01/detecting-net-command-duplicates-programmatically.html               
         }
     }
 
@@ -148,12 +136,6 @@ public sealed class AddinManagerBase
         _activeCmdItem = null;
         _activeApp = null;
         _activeAppItem = null;
-    }
-
-    public MethodInfo ActiveEC
-    {
-        get => _activeEc;
-        set => _activeEc = value;
     }
 
     public Addin ActiveCmd
@@ -189,8 +171,7 @@ public sealed class AddinManagerBase
     private string _activeTempFolder = string.Empty;
 
     private static volatile AddinManagerBase _instance;
-
-    private MethodInfo _activeEc;
+    
 
     private Addin _activeCmd;
 

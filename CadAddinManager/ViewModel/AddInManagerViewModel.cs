@@ -227,7 +227,6 @@ public class AddInManagerViewModel : ViewModelBase
                 {
                     FrmAddInManager.Close();
                     Execute();
-                    //FrmAddInManager = null;
 
                 }
             }
@@ -240,7 +239,7 @@ public class AddInManagerViewModel : ViewModelBase
 
     private void Execute()
     {
-        MAddinManagerBase.RunActiveCommand(this);
+        MAddinManagerBase.RunActiveCommand();
     }
 
     private void OpenLcAssemblyCommandClick()
