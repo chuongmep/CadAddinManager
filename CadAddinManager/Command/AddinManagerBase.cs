@@ -62,6 +62,7 @@ public sealed class AddinManagerBase
                         var commandAtt = methodInfo
                             .GetCustomAttributes(typeof(Autodesk.AutoCAD.Runtime.CommandMethodAttribute), false)
                             .FirstOrDefault();
+                        MessageBox.Show(commandAtt.ToString());
                         string name2 = $"{methodInfo.DeclaringType.Name}.{methodInfo.Name}";
                         if (_activeEc != null)
                         {
