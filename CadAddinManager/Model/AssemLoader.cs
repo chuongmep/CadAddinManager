@@ -308,7 +308,7 @@ public class AssemLoader
                     break;
                 }
 
-                if (String.Compare(assembly2.GetName().Name, "Acdbmgd", StringComparison.OrdinalIgnoreCase) == 0)
+                if (String.Compare(assembly2.GetName().Name, "acdbmgd", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     CadApiAssemblyFullName = assembly2.GetName().Name;
                     break;
