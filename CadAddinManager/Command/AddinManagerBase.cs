@@ -43,7 +43,7 @@ public sealed class AddinManagerBase
         var filePath = _activeCmd.FilePath;
         if (!File.Exists(filePath))
         {
-            MessageBox.Show("File not found: " + filePath);
+            MessageBox.Show("File not found: " + filePath,DefaultSetting.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
         try
