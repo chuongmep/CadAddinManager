@@ -1,6 +1,6 @@
 ﻿namespace CadAddinManager.Model;
 
-public class NavisAddin : ViewModelBase
+public class CadAddin : ViewModelBase
 {
     public bool IsReadOnly { get; set; }
     public VisibleModel State { get; set; }

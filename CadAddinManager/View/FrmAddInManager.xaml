@@ -140,6 +140,15 @@
                         </TreeView.ItemContainerStyle>
                     </control:ExtendedTreeView>
                 </TabItem>
+                <TabItem
+                    Foreground="SteelBlue"
+                    Header="Listener"
+                    IsSelected="{Binding IsTabLogSelected}"
+                    ToolTip="Support Listen Event Trace, Debug,Revit Events">
+                    <control:LogControl
+                        x:Name="LogControl"
+                        DataContext="{x:Null}" />
+                </TabItem>
             </TabControl>
         </Grid>
         <StackPanel Grid.Row="2">

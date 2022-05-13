@@ -99,6 +99,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Chuongmep.Acad.Api.acmgd" Version="$(CADVersion).*">
+      <ExcludeAssets>runtime </ExcludeAssets>
+    </PackageReference>
     <PackageReference Include="Chuongmep.Acad.Api.acdbmgd" Version="$(CADVersion).*">
       <ExcludeAssets>runtime </ExcludeAssets>
     </PackageReference>
@@ -108,6 +111,11 @@
     <PackageReference Include="Chuongmep.Acad.Api.AdWindows" Version="$(CADVersion).*">
       <ExcludeAssets>runtime </ExcludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   
   <PropertyGroup>

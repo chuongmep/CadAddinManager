@@ -59,7 +59,7 @@ public abstract class Addins
         addinDict[assemblyName].ItemList.Add(item);
     }
 
-    public List<AddinItem> LoadItems(Assembly assembly, string fullName, string originalAssemblyFilePath, AddinType type)
+    public List<AddinItem> LoadItems(Assembly assembly, string originalAssemblyFilePath, AddinType type)
     {
        
         List<AddinItem> list = new List<AddinItem>();

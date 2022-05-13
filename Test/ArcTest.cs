@@ -14,7 +14,6 @@ public class ArcTest
     {
         var document = Application.DocumentManager.MdiActiveDocument;
         var database = document.Database;
-
         try
         {
             using (var transaction = database.TransactionManager.StartTransaction())

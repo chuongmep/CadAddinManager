@@ -86,8 +86,24 @@ public class App : ICadCommand
                 GetEmbeddedPng(addinAssembly, "CadAddinManager.Resources.dev32x32.png"),
             CommandHandler = new RelayCommand(new AddInManagerFaceLess().Execute)
         };
-        //Add the Button to the Tab
         rps.Items.Add(btnConfig);
+        //Create button 3
+        RibbonButton btnLogcontrol = new RibbonButton
+        {
+            Orientation = Orientation.Vertical,
+            AllowInStatusBar = true,
+            Size = RibbonItemSize.Large,
+            Name = "Show/Hide \n Dock Debug/Trace",
+            ShowText = true,
+            Text = "Show/Hide \n Dock Debug/Trace",
+            Description = "Show/Hide Dock Debug/Trace",
+            Image = GetEmbeddedPng(addinAssembly,
+                "CadAddinManager.Resources.dev16x16.png"),
+            LargeImage =
+                GetEmbeddedPng(addinAssembly, "CadAddinManager.Resources.dev32x32.png"),
+            CommandHandler = new RelayCommand(new DockPanelCommand().Execute)
+        };
+        rps.Items.Add(btnLogcontrol);
         return rp;
     }
     public static ImageSource GetEmbeddedPng(System.Reflection.Assembly app, string imageName)

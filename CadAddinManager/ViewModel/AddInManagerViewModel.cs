@@ -109,11 +109,11 @@ public class AddInManagerViewModel : ViewModelBase
         set => OnPropertyChanged(ref isCurrentVersion, value);
     }
 
-    private ObservableCollection<NavisAddin> addinStartup;
+    private ObservableCollection<CadAddin> addinStartup;
 
-    public ObservableCollection<NavisAddin> AddInStartUps
+    public ObservableCollection<CadAddin> AddInStartUps
     {
-        get { return addinStartup ??= new ObservableCollection<NavisAddin>(); }
+        get { return addinStartup ??= new ObservableCollection<CadAddin>(); }
         set => OnPropertyChanged(ref addinStartup, value);
     }
 
@@ -134,7 +134,23 @@ public class AddInManagerViewModel : ViewModelBase
         get => isTabCmdSelected;
         set => OnPropertyChanged(ref isTabCmdSelected, value);
     }
+    private bool isTabLogSelected;
 
+    public bool IsTabLogSelected
+    {
+        get
+        {
+            if (isTabLogSelected)
+            {
+                LogControlViewModel vm = new LogControlViewModel(){FrmLogControl = FrmAddInManager.LogControl};
+                FrmAddInManager.LogControl.DataContext = vm;
+                FrmAddInManager.LogControl.Loaded += vm.LogFileWatcher;
+                FrmAddInManager.LogControl.Unloaded += vm.UserControl_Unloaded;
+            };
+            return isTabLogSelected;
+        }
+        set => OnPropertyChanged(ref isTabLogSelected, value);
+    }
     private bool isTabAppSelected;
 
     public bool IsTabAppSelected

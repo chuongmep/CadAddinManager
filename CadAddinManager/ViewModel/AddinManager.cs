@@ -67,7 +67,7 @@ public class AddinManager
             assemLoader.HookAssemblyResolve();
 
             var assembly = assemLoader.LoadAddinsToTempFolder(filePath, true);
-            list = commands.LoadItems(assembly, StaticUtil.CommandFullName, filePath, AddinType.Command);
+            list = commands.LoadItems(assembly, filePath, AddinType.Command);
         }
         catch (Exception e)
         {

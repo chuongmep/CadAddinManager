@@ -1,0 +1,70 @@
+﻿<UserControl
+    x:Class="CadAddinManager.View.Control.LogControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="clr-namespace:CadAddinManager.ViewModel"
+    d:DesignHeight="350"
+    d:DesignWidth="350"
+    Background="White"
+    d:DataContext="{d:DesignInstance viewModel:LogControlViewModel}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="ListViewItem">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="Red" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="5,5,5,5" x:Name="ctlList">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <ListBox
+            x:Name="listBox_LogMessages"
+            FontFamily="{Binding DisplayFontFamily}"
+            ItemsSource="{Binding MessageList}"
+            >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock
+                        FontSize="{Binding FontSize}"
+                        FontWeight="{Binding FontWeight}"
+                        Foreground="{Binding MessageColor}"
+                        Text="{Binding Message}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+            <DockPanel Grid.Row="0">
+                <!-- <CheckBox -->
+                <!--     Margin="5,0,5,0" -->
+                <!--     VerticalAlignment="Center" -->
+                <!--     Content="Revit Events" -->
+                <!--     IsEnabled="False" -->
+                <!--     IsChecked="{Binding WatchRevitEventCommand}" /> -->
+            </DockPanel>
+            <Button
+                Grid.Column="1"
+                Width="80"
+                Background="Azure"
+                VerticalAlignment="Center"
+                Content="Clear Output"
+                Command="{Binding ClearLogCommand}"
+                Foreground="SteelBlue"
+                Style="{x:Null}"
+                ToolTip="Clear all result listener" />
+        </Grid>
+    </Grid>
+</UserControl>
