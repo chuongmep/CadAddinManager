@@ -41,7 +41,7 @@ Some feature include:
 
 ## Add-In Manager
 
-![](pic/AddinManager.png)
+![](pic/AddinManager.gif)
 
 ### Command
 
