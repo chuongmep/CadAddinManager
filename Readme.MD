@@ -26,7 +26,9 @@ to support multiple platform API for developer. With current technology, you can
 
 
 Some feature include:
-
+- A newbie can create a new Add-in and explore **AutoCAD or Civil3D API** easy with Add-in manager.
+- Add-in tester(use Debug and Trace to test your add-in).
+- **Debug / Trace** : Support Show result use [Debug](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.debug?view=net-6.0) or [Trace](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.trace?view=net-6.0) to show result in Autocad or Civil3D.
 - Add-in manager
     - AddInManager Manual : Use for normal process load/unload addin
     - AddInManager Faceless : use for load last process before addin without UI
@@ -67,6 +69,32 @@ Execute a command easily  :
  6.Use faceless when you change code or rebuild.
 
 ---
+### Trace/Debug
+
+- [x] Show/Hide result inside **Dockpanel Navisworks**.
+- [x] Show Result history inside **Navis Addin Manager**.
+- [x] Clear Result.
+- [X] Show Result by color.
+
+A sample command to execute:
+```csharp
+using System.Diagnostics;
+using Autodesk.AutoCAD.Runtime;
+public class DebugTraceTest
+{
+    [CommandMethod("DebugTraceTest")]
+    public void Action()
+    {
+        //Trace or Debug Something
+        Trace.WriteLine($"Warning: This is a warning");
+        Trace.WriteLine($"Error: This is a error");
+        Trace.WriteLine($"Add: This is a add");
+        Trace.WriteLine($"Modify: This is a modify");
+        Trace.WriteLine($"Delete: This is a delete");
+    }
+}
+```
+![](pic/DockPanelOutput.png)
 
 ## Installation
 

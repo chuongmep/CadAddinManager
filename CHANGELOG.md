@@ -1,4 +1,12 @@
 # Changelog
+- 2022-05-13 **1.0.2**
+  - Add tab support show result trace/debug
+  - Add DockPanel Support Show/Hide Debug/Trace result.
+  - Support use Trace.Write() output in CadAddinManager and DockPanel **Debug/Trace Output**
+  - Support use Trace.WriteLine() output in CadAddinManager and DockPanel **Debug/Trace Output**
+  - Support use Debug.WriteLine() output in CadAddinManager and DockPanel **Debug/Trace Output**
+  - Support use Debug.WriteLine() output in CadAddinManager and DockPanel **Debug/Trace Output**
+  - Support show difference color type : Add,Modify,Warning,Error,Delete.
 - 2022-04-28 **1.0.1**
   - Fix small bug when execute command string reflect.
   - Add some test cases.
