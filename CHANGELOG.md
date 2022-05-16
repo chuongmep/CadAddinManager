@@ -1,4 +1,6 @@
 # Changelog
+- 2022-05-16 **1.0.3**
+  - Support Copy Content Debug/Trace Output to Clipboard.
 - 2022-05-13 **1.0.2**
   - Add tab support show result trace/debug
   - Add DockPanel Support Show/Hide Debug/Trace result.
