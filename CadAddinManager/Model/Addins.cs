@@ -93,7 +93,6 @@ public abstract class Addins
                         {
                             MethodInfo = methodInfo,
                             Command = attribute,
-                            //TODO : Bug : https://adndevblog.typepad.com/autocad/2014/01/detecting-net-command-duplicates-programmatically.html
                         };
                         list.Add(item);
                     }

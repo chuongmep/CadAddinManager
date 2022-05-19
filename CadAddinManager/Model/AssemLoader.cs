@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using CadAddinManager.View;
+using Mono.Cecil;
 
 namespace CadAddinManager.Model;
 
@@ -83,9 +84,9 @@ public class AssemLoader
         {
             stringBuilder.Append("-Executing-");
         }
-
         tempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
-        var assembly = CopyAndLoadAddin(originalFilePath, parsingOnly);
+        string fileAssemblyTemp = ResolveDuplicateMethod(originalFilePath);
+        var assembly = CopyAndLoadAddin(fileAssemblyTemp, parsingOnly);
 
         if (assembly == null || !IsAPIReferenced(assembly))
         {
@@ -95,6 +96,104 @@ public class AssemLoader
         return assembly;
     }
 
+    private string ResolveDuplicateMethod(string originalFilePath)
+    {
+        AssemblyDefinition ass = AssemblyDefinition.ReadAssembly(originalFilePath);
+        foreach (ModuleDefinition def in ass.Modules)
+        {
+            foreach (TypeDefinition d in def.Types)
+            {
+                foreach (MethodDefinition m in d.Methods)
+                {
+                    if (!m.IsConstructor && !m.IsRuntimeSpecialName && m.Name != "Main")
+                    {
+                        foreach (CustomAttribute customAttribute in m.CustomAttributes)
+                        {
+                            if (customAttribute.Constructor.DeclaringType.Name == "CommandMethodAttribute")
+                            {
+                                int count = customAttribute.ConstructorArguments.Count;
+                                CustomAttribute newAttr = null;
+                                if (count == 3)
+                                {
+                                   newAttr = CreateCustomAttribute3Type(customAttribute);
+                                }
+                                else if (count == 2)
+                                {
+                                    newAttr = CreateCustomAttribute2Type(customAttribute);
+                                }
+                                else if (count == 1)
+                                {
+                                    newAttr = CreateCustomAttribute1Type(customAttribute);
+                                }
+                                m.CustomAttributes.Remove(customAttribute);
+                                m.CustomAttributes.Add(newAttr);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        string fileAssemblyTemp = SaveAssemblyModifyToTemp(originalFilePath);
+        ass.Write(fileAssemblyTemp);
+        return fileAssemblyTemp;
+    }
+
+    private string SaveAssemblyModifyToTemp(string originalFilePath)
+    {
+        string prefix = "RenameCommand-";
+        var str = $"{DateTime.Now:yyyyMMdd_HHmmss_ffff}";
+        var path = Path.Combine(DefaultSetting.DirLogFile, prefix + str);
+        var directoryInfo3 = new DirectoryInfo(path);
+        directoryInfo3.Create();
+        string fileAssemblyTemp = Path.Combine(directoryInfo3.FullName, Path.GetFileName(originalFilePath));
+        return fileAssemblyTemp;
+    }
+    private CustomAttribute CreateCustomAttribute3Type(CustomAttribute customAttribute)
+    {
+        return new CustomAttribute(customAttribute.Constructor)
+        { 
+            ConstructorArguments = 
+            {
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[0].Type, 
+                    customAttribute.ConstructorArguments[0].Value + Guid.NewGuid().ToString()),
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[1].Type, 
+                    customAttribute.ConstructorArguments[1].Value),
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[2].Type, 
+                    customAttribute.ConstructorArguments[2].Value),
+            }
+        };  
+    }
+    private CustomAttribute CreateCustomAttribute2Type(CustomAttribute customAttribute)
+    {
+        return new CustomAttribute(customAttribute.Constructor)
+        { 
+            ConstructorArguments = 
+            {
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[0].Type, 
+                    customAttribute.ConstructorArguments[0].Value + Guid.NewGuid().ToString()),
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[1].Type, 
+                    customAttribute.ConstructorArguments[1].Value),
+            }
+        };  
+    }
+    private CustomAttribute CreateCustomAttribute1Type(CustomAttribute customAttribute)
+    {
+        return new CustomAttribute(customAttribute.Constructor)
+        { 
+            ConstructorArguments = 
+            {
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[0].Type, 
+                    customAttribute.ConstructorArguments[0].Value + Guid.NewGuid().ToString()),
+            }
+        };  
+    }
     private Assembly CopyAndLoadAddin(string srcFilePath, bool onlyCopyRelated)
     {
         var text = string.Empty;
