@@ -35,7 +35,6 @@ Some feature include:
     - AddInManager Manual : Use for normal process load/unload addin
     - AddInManager Faceless : use for load last process before addin without UI
 - Allow user know whether plugin can load successfully or not.
-- No depend on any library from outside **Autocad** & **Civil3D**.
 - <kbd>F5</kbd> - Load fresh plugin don't need load again.
 - <kbd>F1</kbd> - Go link open source report some error,bug or feature request.
 - <kbd>Delete</kbd> - Quick remove by use right click or use from keyboard.

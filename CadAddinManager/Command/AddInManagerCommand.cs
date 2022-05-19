@@ -10,7 +10,7 @@ namespace CadAddinManager.Command;
 public class AddInManagerManual : ICadCommand
 {
     
-    [Autodesk.AutoCAD.Runtime.CommandMethod("AddInManagerManual",CommandFlags.Session)]
+    [CommandMethod("AddInManagerManual",CommandFlags.Session)]
     public override void Execute()
     {
         Debug.Listeners.Clear();

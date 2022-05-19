@@ -1,4 +1,6 @@
 # Changelog
+- 2022-05-20 **1.0.4**
+  - fix bug eDuplicateKey below commandline when load or execute assembly [#1](https://github.com/chuongmep/CadAddinManager/issues/1).
 - 2022-05-16 **1.0.3**
   - Support Copy Content Debug/Trace Output to Clipboard.
 - 2022-05-13 **1.0.2**
