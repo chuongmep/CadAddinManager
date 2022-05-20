@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using CadAddinManager.View;
 using Mono.Cecil;
+using Mono.Cecil.Pdb;
 
 namespace CadAddinManager.Model;
 
@@ -84,16 +85,18 @@ public class AssemLoader
         {
             stringBuilder.Append("-Executing-");
         }
+        
         tempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
-        string fileAssemblyTemp = String.Empty;
-        try
-        {
-            fileAssemblyTemp = ResolveDuplicateMethod(originalFilePath);
-        }
-        catch (Exception)
-        {
-            fileAssemblyTemp = originalFilePath;
-        }
+        string fileAssemblyTemp = ResolveDuplicateMethod(originalFilePath);
+        // string fileAssemblyTemp = String.Empty;
+        // try
+        // {
+        //     fileAssemblyTemp = ResolveDuplicateMethod(originalFilePath);
+        // }
+        // catch (Exception)
+        // {
+        //     fileAssemblyTemp = originalFilePath;
+        // }
         var assembly = CopyAndLoadAddin(fileAssemblyTemp, parsingOnly);
         if (assembly == null || !IsAPIReferenced(assembly))
         {
@@ -104,7 +107,9 @@ public class AssemLoader
 
     private string ResolveDuplicateMethod(string originalFilePath)
     {
-        AssemblyDefinition ass = AssemblyDefinition.ReadAssembly(originalFilePath);
+        
+        // AssemblyDefinition ass = AssemblyDefinition.ReadAssembly(originalFilePath);
+        AssemblyDefinition ass = GetAssemblyDef(originalFilePath);
         foreach (ModuleDefinition def in ass.Modules)
         {
             foreach (TypeDefinition d in def.Types)
@@ -144,7 +149,26 @@ public class AssemLoader
         ass.Write(fileAssemblyTemp);
         return fileAssemblyTemp;
     }
+    public static AssemblyDefinition GetAssemblyDef(string assemblyPath)
+    {
+        
+        var assemblyResolver = new DefaultAssemblyResolver();
+        var assemblyLocation = Path.GetDirectoryName(assemblyPath);
+        assemblyResolver.AddSearchDirectory(assemblyLocation);
 
+        var readerParameters = new ReaderParameters { AssemblyResolver = assemblyResolver };
+
+        var pdbName = Path.ChangeExtension(assemblyPath, "pdb");
+        if (File.Exists(pdbName))
+        {
+            var symbolReaderProvider = new PdbReaderProvider();
+            readerParameters.SymbolReaderProvider = symbolReaderProvider;
+            readerParameters.ReadSymbols = true;
+        }
+
+        var assemblyDef = AssemblyDefinition.ReadAssembly(assemblyPath, readerParameters);
+        return assemblyDef;
+    }
     private string SaveAssemblyModifyToTemp(string originalFilePath)
     {
         string prefix = "RenameCommand-";

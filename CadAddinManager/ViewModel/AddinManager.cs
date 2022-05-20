@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using CadAddinManager.Model;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
@@ -66,7 +67,7 @@ public class AddinManager
         {
             assemLoader.HookAssemblyResolve();
 
-            var assembly = assemLoader.LoadAddinsToTempFolder(filePath, true);
+            Assembly assembly = assemLoader.LoadAddinsToTempFolder(filePath, true);
             list = commands.LoadItems(assembly, filePath, AddinType.Command);
         }
         catch (Exception e)
