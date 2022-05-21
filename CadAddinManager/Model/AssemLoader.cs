@@ -73,30 +73,13 @@ public class AssemLoader
         {
             return null;
         }
-
         this.parsingOnly = parsingOnly;
         originalFolder = Path.GetDirectoryName(originalFilePath);
         var stringBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(originalFilePath));
-        if (parsingOnly)
-        {
-            stringBuilder.Append("-Parsing-");
-        }
-        else
-        {
-            stringBuilder.Append("-Executing-");
-        }
-        
+        if (parsingOnly)  stringBuilder.Append("-Parsing-");
+        else stringBuilder.Append("-Executing-");
         tempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
         string fileAssemblyTemp = ResolveDuplicateMethod(originalFilePath);
-        // string fileAssemblyTemp = String.Empty;
-        // try
-        // {
-        //     fileAssemblyTemp = ResolveDuplicateMethod(originalFilePath);
-        // }
-        // catch (Exception)
-        // {
-        //     fileAssemblyTemp = originalFilePath;
-        // }
         var assembly = CopyAndLoadAddin(fileAssemblyTemp, parsingOnly);
         if (assembly == null || !IsAPIReferenced(assembly))
         {

@@ -72,8 +72,8 @@ Execute a command easily  :
 ---
 ### Trace/Debug
 
-- [x] Show/Hide result inside **Dockpanel Navisworks**.
-- [x] Show Result history inside **Navis Addin Manager**.
+- [x] Show/Hide result inside Dockpanel Autocad and Civil3D.
+- [x] Show Result history inside CadAddinManager.
 - [x] Clear Result.
 - [X] Show Result by color.
 
