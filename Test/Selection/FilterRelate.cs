@@ -5,23 +5,33 @@ using Autodesk.AutoCAD.Runtime;
 
 namespace Test.Selection;
 
-public class SelectionFilters
+public class FilterRelate
 {
-    [CommandMethod("FilterSelectionSet")]
-    public static void FilterSelectionSet()
+    [CommandMethod("FilterRelational")]
+    public void FilterRelational()
 
     {
         // Get the current document editor
 
         Editor acDocEd = Application.DocumentManager.MdiActiveDocument.Editor;
+
+
         // Create a TypedValue array to define the filter criteria
 
-        TypedValue[] acTypValAr = new TypedValue[1];
+        TypedValue[] acTypValAr = new TypedValue[3];
 
         acTypValAr.SetValue(new TypedValue((int) DxfCode.Start, "CIRCLE"), 0);
+
+        acTypValAr.SetValue(new TypedValue((int) DxfCode.Operator, ">="), 15);
+
+        acTypValAr.SetValue(new TypedValue(40, 5), 2);
+
+
         // Assign the filter criteria to a SelectionFilter object
 
         SelectionFilter acSelFtr = new SelectionFilter(acTypValAr);
+
+
         // Request for objects to be selected in the drawing area
 
         PromptSelectionResult acSSPrompt;
@@ -36,9 +46,13 @@ public class SelectionFilters
         {
             SelectionSet acSSet = acSSPrompt.Value;
 
-            Application.ShowAlertDialog("Number of objects selected: " + acSSet.Count.ToString());
+
+            Application.ShowAlertDialog("Number of objects selected: " +
+                                        acSSet.Count.ToString());
         }
+
         else
+
         {
             Application.ShowAlertDialog("Number of objects selected: 0");
         }

@@ -3,7 +3,7 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 
-namespace Test;
+namespace Test.Selection;
 
 public class SelectCross
 {

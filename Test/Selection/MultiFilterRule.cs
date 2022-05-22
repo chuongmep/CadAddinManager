@@ -3,7 +3,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
 
-namespace Test;
+namespace Test.Selection;
 
 public class MultiFilterRule
 {
