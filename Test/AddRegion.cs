@@ -31,10 +31,11 @@ public class AddRegion
             acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
             // Open the Block table record Model space for write
 
-            BlockTableRecord acBlkTblRec;
+            BlockTableRecord? acBlkTblRec = null;
 
-            acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],
-                OpenMode.ForWrite) as BlockTableRecord;
+            if (acBlkTbl != null)
+                acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],
+                    OpenMode.ForWrite) as BlockTableRecord;
 
 
             // Create an in memory circle
@@ -62,12 +63,12 @@ public class AddRegion
 
                 myRegionColl = Region.CreateFromCurves(acDBObjColl);
 
-                Region acRegion = myRegionColl[0] as Region;
+                Region? acRegion = myRegionColl[0] as Region;
 
 
                 // Add the new object to the block table record and the transaction
 
-                acBlkTblRec.AppendEntity(acRegion);
+                acBlkTblRec?.AppendEntity(acRegion);
 
                 acTrans.AddNewlyCreatedDBObject(acRegion, true);
 

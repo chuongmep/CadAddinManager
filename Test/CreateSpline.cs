@@ -27,10 +27,11 @@ public class CreateSpline
             acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
             // Open the Block table record Model space for write
 
-            BlockTableRecord acBlkTblRec;
+            BlockTableRecord? acBlkTblRec = null;
 
-            acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],
-                OpenMode.ForWrite) as BlockTableRecord;
+            if (acBlkTbl != null)
+                acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],
+                    OpenMode.ForWrite) as BlockTableRecord;
             // Define the fit points for the spline
 
             Point3dCollection ptColl = new Point3dCollection();
@@ -51,7 +52,7 @@ public class CreateSpline
 
             acSpline.SetDatabaseDefaults();
             // Add the new object to the block table record and the transaction
-            acBlkTblRec.AppendEntity(acSpline);
+            acBlkTblRec?.AppendEntity(acSpline);
             acTrans.AddNewlyCreatedDBObject(acSpline, true);
             // Save the new line to the database
 

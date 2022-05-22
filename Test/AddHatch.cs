@@ -33,9 +33,11 @@ public class AddHatch
             acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
             // Open the Block table record Model space for write
 
-            BlockTableRecord acBlkTblRec;
+            BlockTableRecord? acBlkTblRec = null;
 
-            acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+            if (acBlkTbl != null)
+                acBlkTblRec =
+                    acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
 
             // Create a circle object for the closed boundary to hatch
 
@@ -51,7 +53,7 @@ public class AddHatch
 
             // Add the new circle object to the block table record and the transaction
 
-            acBlkTblRec.AppendEntity(acCirc);
+            acBlkTblRec?.AppendEntity(acCirc);
 
             acTrans.AddNewlyCreatedDBObject(acCirc, true);
             
@@ -65,7 +67,7 @@ public class AddHatch
 
             Hatch acHatch = new Hatch();
 
-            acBlkTblRec.AppendEntity(acHatch);
+            acBlkTblRec?.AppendEntity(acHatch);
 
             acTrans.AddNewlyCreatedDBObject(acHatch, true);
             
