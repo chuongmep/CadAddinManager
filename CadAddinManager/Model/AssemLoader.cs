@@ -164,13 +164,13 @@ public class AssemLoader
     }
     private CustomAttribute CreateCustomAttribute3Type(CustomAttribute customAttribute)
     {
+        string valueAttribute = ResolveValueAttribute(customAttribute);
         return new CustomAttribute(customAttribute.Constructor)
         { 
             ConstructorArguments = 
             {
                 new CustomAttributeArgument(
-                    customAttribute.ConstructorArguments[0].Type, 
-                    customAttribute.ConstructorArguments[0].Value + Guid.NewGuid().ToString()),
+                    customAttribute.ConstructorArguments[0].Type,valueAttribute),
                 new CustomAttributeArgument(
                     customAttribute.ConstructorArguments[1].Type, 
                     customAttribute.ConstructorArguments[1].Value),
@@ -182,13 +182,14 @@ public class AssemLoader
     }
     private CustomAttribute CreateCustomAttribute2Type(CustomAttribute customAttribute)
     {
+        string valueAttribute = ResolveValueAttribute(customAttribute);
         return new CustomAttribute(customAttribute.Constructor)
         { 
             ConstructorArguments = 
             {
                 new CustomAttributeArgument(
                     customAttribute.ConstructorArguments[0].Type, 
-                    customAttribute.ConstructorArguments[0].Value + Guid.NewGuid().ToString()),
+                    valueAttribute),
                 new CustomAttributeArgument(
                     customAttribute.ConstructorArguments[1].Type, 
                     customAttribute.ConstructorArguments[1].Value),
@@ -197,15 +198,23 @@ public class AssemLoader
     }
     private CustomAttribute CreateCustomAttribute1Type(CustomAttribute customAttribute)
     {
+        string valueAttribute = ResolveValueAttribute(customAttribute);
+
         return new CustomAttribute(customAttribute.Constructor)
         { 
             ConstructorArguments = 
             {
                 new CustomAttributeArgument(
-                    customAttribute.ConstructorArguments[0].Type, 
-                    customAttribute.ConstructorArguments[0].Value + Guid.NewGuid().ToString()),
+                    customAttribute.ConstructorArguments[0].Type,valueAttribute),
             }
         };  
+    }
+    private string ResolveValueAttribute(CustomAttribute att)
+    {
+        string suffix =  DateTime.Now.ToString("yyyyMMddhhmmssfff");
+        string value = att.ConstructorArguments[0].Value +suffix;
+        if (value.Length >= 64) value = "Execute" + suffix;
+        return value;
     }
     private Assembly CopyAndLoadAddin(string srcFilePath, bool onlyCopyRelated)
     {
