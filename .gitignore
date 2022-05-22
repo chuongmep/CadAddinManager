@@ -28,6 +28,8 @@ Thumbs.db
 *.ide-wal
 *.dll
 *.suo
+*.dwl
+*.dwl2
 [Bb]in
 [Dd]ebug*/
 *.lib
