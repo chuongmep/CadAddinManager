@@ -1,4 +1,7 @@
 # Changelog
+- 2022-05-22 **1.0.5**
+  - Fix name string define attribute larger 64 character show eInvalidInput.
+  - Add some example learning curve.
 - 2022-05-20 **1.0.4**
   - fix bug eDuplicateKey below commandline when load or execute assembly [#1](https://github.com/chuongmep/CadAddinManager/issues/1).
 - 2022-05-16 **1.0.3**
