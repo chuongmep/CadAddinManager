@@ -9,8 +9,8 @@ namespace Test;
 
 public class TestCircle
 {
-    [CommandMethod("CreateCricle")]
-    public void cmdCreateCricle()
+    [CommandMethod("CreateCircle")]
+    public static void cmdCreateCircle()
     {
         var doc = Application.DocumentManager.MdiActiveDocument;
         var ed = doc.Editor;
