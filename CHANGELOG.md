@@ -1,4 +1,6 @@
 # Changelog
+- 2022-05-29 **1.0.6**
+  - Add tab lisp function and support reload update lisp function 
 - 2022-05-22 **1.0.5**
   - Fix name string define attribute larger 64 character show eInvalidInput.
   - Add some example learning curve.
