@@ -20,7 +20,8 @@
             <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
             <ResourceDictionary.MergedDictionaries>
                 <!--<ResourceDictionary Source="/PresentationFramework.Luna;component/themes/Luna.NormalColor.xaml" />-->
-                <ResourceDictionary Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
+                <ResourceDictionary
+                    Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -83,12 +84,13 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <TabControl x:Name="TabControl" SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TabControl x:Name="TabControl"
+                        SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem
                     x:Name="TabCommand"
                     FontSize="14"
                     Foreground="SteelBlue"
-                    Header="Load Command"
+                    Header="Command"
                     IsSelected="{Binding IsTabCmdSelected}">
                     <control:ExtendedTreeView
                         x:Name="TreeViewCommand"
@@ -106,7 +108,8 @@
                             </ContextMenu>
                         </TreeView.ContextMenu>
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate DataType="viewModel:AddinModel" ItemsSource="{Binding Children, Mode=OneTime}">
+                            <HierarchicalDataTemplate DataType="viewModel:AddinModel"
+                                                      ItemsSource="{Binding Children, Mode=OneTime}">
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox
                                         VerticalAlignment="Center"
@@ -124,15 +127,80 @@
                                 <Setter Property="control:VirtualToggleButton.IsVirtualToggleButton" Value="True" />
                                 <Setter Property="control:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
                                 <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                                <Setter Property="control:MouseDoubleClick.Command" Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
-                                <Setter Property="control:ExtendedTreeView.ContextMenuOpened" Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                <Setter Property="control:MouseDoubleClick.Command"
+                                        Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                <Setter Property="control:ExtendedTreeView.ContextMenuOpened"
+                                        Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
                                 <Style.Triggers>
                                     <MultiTrigger>
                                         <MultiTrigger.Conditions>
                                             <Condition Property="IsSelected" Value="true" />
-                                            <Condition Property="control:ExtendedTreeView.ContextMenuOpened" Value="true" />
+                                            <Condition Property="control:ExtendedTreeView.ContextMenuOpened"
+                                                       Value="true" />
                                         </MultiTrigger.Conditions>
-                                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                        <Setter Property="Background"
+                                                Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </MultiTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                    </control:ExtendedTreeView>
+                </TabItem>
+                <TabItem
+                    x:Name="TabLispFunction"
+                    FontSize="14"
+                    Foreground="SteelBlue"
+                    Header="Lisp Function"
+                    IsSelected="{Binding IsTabLispSelected}">
+                    <control:ExtendedTreeView
+                        x:Name="TreeViewLispFunction"
+                        FontSize="12"
+                        ItemsSource="{Binding LispFunctionItems, Mode=TwoWay}"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        SelectedItem_="{Binding SelectedLispItem, Mode=TwoWay}">
+                        <TreeView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{Binding LoadCommand}" Header="Load" />
+                                <MenuItem Command="{Binding RemoveCommand}" Header="Remove" />
+                                <MenuItem Command="{Binding OpenLcAssemblyCommand}" Header="Open Location Assembly" />
+                                <MenuItem Command="{Binding ExecuteAddinCommand}" Header="Run" />
+                                <MenuItem Command="{Binding ReloadCommand}" Header="Reload" />
+                            </ContextMenu>
+                        </TreeView.ContextMenu>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="viewModel:AddinModel"
+                                                      ItemsSource="{Binding Children, Mode=OneTime}">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox
+                                        VerticalAlignment="Center"
+                                        Focusable="False"
+                                        IsChecked="{Binding IsChecked}" />
+                                    <ContentPresenter Margin="2,0" Content="{Binding Name, Mode=OneTime}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="IsExpanded" Value="True" />
+                                <Setter Property="IsSelected" Value="{Binding IsInitiallySelected, Mode=TwoWay}" />
+                                <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                                <Setter Property="control:VirtualToggleButton.IsVirtualToggleButton" Value="True" />
+                                <Setter Property="control:VirtualToggleButton.IsChecked" Value="{Binding IsChecked}" />
+                                <Setter Property="control:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                <Setter Property="control:MouseDoubleClick.Command"
+                                        Value="{Binding Path=DataContext.ExecuteAddinCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                <Setter Property="control:ExtendedTreeView.ContextMenuOpened"
+                                        Value="{Binding ContextMenu.IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}" />
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="true" />
+                                            <Condition Property="control:ExtendedTreeView.ContextMenuOpened"
+                                                       Value="true" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background"
+                                                Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                                         <Setter Property="Foreground" Value="Red" />
                                     </MultiTrigger>
                                 </Style.Triggers>

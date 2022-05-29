@@ -23,6 +23,7 @@ public sealed class AddinManagerBase
             RunActiveCommand();
             return;
         }
+
         var FrmAddInManager = new FrmAddInManager(vm);
         FrmAddInManager.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         // Application.ShowModelessWindow(FrmAddInManager);
@@ -43,12 +44,13 @@ public sealed class AddinManagerBase
         var filePath = _activeCmd.FilePath;
         if (!File.Exists(filePath))
         {
-            MessageBox.Show("File not found: " + filePath,DefaultSetting.AppName, MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show("File not found: " + filePath, DefaultSetting.AppName, MessageBoxButton.OK,
+                MessageBoxImage.Error);
             return;
         }
+
         try
         {
-            
             assemLoader.HookAssemblyResolve();
             var assembly = assemLoader.LoadAddinsToTempFolder(filePath, false);
             if (assembly == null) return;
@@ -63,7 +65,7 @@ public sealed class AddinManagerBase
                         CommandMethodAttribute commandAtt = (CommandMethodAttribute) methodInfo
                             .GetCustomAttributes(typeof(CommandMethodAttribute), false)
                             .FirstOrDefault();
-                        string fullName = string.Join(".", methodInfo.DeclaringType.Name,methodInfo.Name);
+                        string fullName = string.Join(".", methodInfo.DeclaringType.Name, methodInfo.Name);
                         if (commandAtt != null && fullName == Instance.ActiveCmdItem.FullClassName)
                         {
                             Invoke(methodInfo);
@@ -93,6 +95,7 @@ public sealed class AddinManagerBase
                 methodInfo.Invoke(null, null);
                 return;
             }
+
             try
             {
                 if (methodInfo.DeclaringType != null)
@@ -134,8 +137,8 @@ public sealed class AddinManagerBase
         _addinManager = new AddinManager();
         _activeCmd = null;
         _activeCmdItem = null;
-        _activeApp = null;
-        _activeAppItem = null;
+        _activeLisp = null;
+        _activeLispItem = null;
     }
 
     public Addin ActiveCmd
@@ -150,16 +153,16 @@ public sealed class AddinManagerBase
         set => _activeCmdItem = value;
     }
 
-    public Addin ActiveApp
+    public Addin ActiveLisp
     {
-        get => _activeApp;
-        set => _activeApp = value;
+        get => _activeLisp;
+        set => _activeLisp = value;
     }
 
-    public AddinItem ActiveAppItem
+    public AddinItem ActiveLispItem
     {
-        get => _activeAppItem;
-        set => _activeAppItem = value;
+        get => _activeLispItem;
+        set => _activeLispItem = value;
     }
 
     public AddinManager AddinManager
@@ -171,15 +174,15 @@ public sealed class AddinManagerBase
     private string _activeTempFolder = string.Empty;
 
     private static volatile AddinManagerBase _instance;
-    
+
 
     private Addin _activeCmd;
 
     private AddinItem _activeCmdItem;
 
-    private Addin _activeApp;
+    private Addin _activeLisp;
 
-    private AddinItem _activeAppItem;
+    private AddinItem _activeLispItem;
 
     private AddinManager _addinManager;
 }

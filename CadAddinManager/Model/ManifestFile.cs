@@ -250,7 +250,7 @@ public class ManifestFile
 
     private void ParseExternalApplications(XmlNode nodeApplication)
     {
-        var addinItem = new AddinItem(AddinType.Application);
+        var addinItem = new AddinItem(AddinType.LispFunction);
         ParseApplicationItems(addinItem, nodeApplication);
         applications.Add(addinItem);
     }

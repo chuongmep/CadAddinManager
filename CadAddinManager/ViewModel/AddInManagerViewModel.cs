@@ -22,7 +22,7 @@ public class AddInManagerViewModel : ViewModelBase
     public AddinManagerBase MAddinManagerBase { get; set; }
 
     private ObservableCollection<AddinModel> commandItems;
-
+    
     public ObservableCollection<AddinModel> CommandItems
     {
         get => commandItems;
@@ -30,6 +30,18 @@ public class AddInManagerViewModel : ViewModelBase
         {
             if (value == commandItems) return;
             commandItems = value;
+            OnPropertyChanged();
+        }
+    }
+    private ObservableCollection<AddinModel> lispFunctionItems;
+
+    public ObservableCollection<AddinModel> LispFunctionItems
+    {
+        get => lispFunctionItems;
+        set
+        {
+            if (value == lispFunctionItems) return;
+            lispFunctionItems = value;
             OnPropertyChanged();
         }
     }
@@ -57,26 +69,25 @@ public class AddInManagerViewModel : ViewModelBase
         }
         set => OnPropertyChanged(ref selectedCommandItem, value);
     }
+    private AddinModel selectedLispItem;
 
-    private AddinModel selectedAppItem;
-
-    public AddinModel SelectedAppItem
+    public AddinModel SelectedLispItem
     {
         get
         {
-            if (selectedAppItem != null && selectedAppItem.IsParentTree == true && IsTabAppSelected)
+            if (selectedLispItem != null && selectedLispItem.IsParentTree == true && IsTabLispSelected)
             {
-                MAddinManagerBase.ActiveApp = selectedAppItem.Addin;
+                MAddinManagerBase.ActiveLisp = selectedLispItem.Addin;
             }
-            else if (selectedAppItem != null && selectedAppItem.IsParentTree == false && IsTabAppSelected)
+            else if (selectedLispItem != null && selectedLispItem.IsParentTree == false && IsTabLispSelected)
             {
-                MAddinManagerBase.ActiveAppItem = selectedAppItem.AddinItem;
-                MAddinManagerBase.ActiveApp = selectedAppItem.Addin;
-                VendorDescription = MAddinManagerBase.ActiveAppItem.Description;
+                MAddinManagerBase.ActiveLispItem = selectedLispItem.AddinItem;
+                MAddinManagerBase.ActiveLisp = selectedLispItem.Addin;
+                VendorDescription = MAddinManagerBase.ActiveLispItem.Description;
             }
-            return selectedAppItem;
+            return selectedLispItem;
         }
-        set => OnPropertyChanged(ref selectedAppItem, value);
+        set => OnPropertyChanged(ref selectedLispItem, value);
     }
 
     public ICommand LoadCommand => new RelayCommand(LoadCommandClick);
@@ -153,7 +164,7 @@ public class AddInManagerViewModel : ViewModelBase
     }
     private bool isTabAppSelected;
 
-    public bool IsTabAppSelected
+    public bool IsTabLispSelected
     {
         get
         {
@@ -181,6 +192,7 @@ public class AddInManagerViewModel : ViewModelBase
         AssemLoader = new AssemLoader();
         MAddinManagerBase = AddinManagerBase.Instance;
         CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+        LispFunctionItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.LispFunctions);
     }
 
     private ObservableCollection<AddinModel> FreshTreeItems(bool isSearchText, Addins addins)
@@ -243,6 +255,18 @@ public class AddInManagerViewModel : ViewModelBase
                 {
                     FrmAddInManager.Close();
                     Execute();
+                }
+            }
+            if (SelectedLispItem?.IsParentTree == false && FrmAddInManager != null)
+            {
+                MAddinManagerBase.ActiveLisp = SelectedLispItem.Addin;
+                MAddinManagerBase.ActiveLispItem = SelectedLispItem.AddinItem;
+                CheckCountSelected(LispFunctionItems, out var result);
+                if (result > 0)
+                {
+                    //TODO
+                    // FrmAddInManager.Close();
+                    // Execute();
 
                 }
             }
@@ -252,7 +276,6 @@ public class AddInManagerViewModel : ViewModelBase
             MessageBox.Show(e.ToString());
         }
     }
-
     private void Execute()
     {
         MAddinManagerBase.RunActiveCommand();
@@ -331,16 +354,28 @@ public class AddInManagerViewModel : ViewModelBase
     private void LoadAssemblyCommand(string fileName)
     {
         var addinType = MAddinManagerBase.AddinManager.LoadAddin(fileName, AssemLoader);
-        if (addinType == AddinType.Invalid)
+        switch (addinType)
         {
-            MessageBox.Show(Resource.LoadInvalid);
-            return;
+            case AddinType.Invalid:
+                MessageBox.Show(Resource.LoadInvalid);
+                return;
+            case AddinType.Command:
+                IsTabCmdSelected = true;
+                FrmAddInManager.TabCommand.Focus();
+                break;
+            case AddinType.LispFunction:
+                IsTabLispSelected = true;
+                FrmAddInManager.TabLispFunction.Focus();
+                break;
+            case AddinType.Mixed:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
-        
-        IsTabCmdSelected = true;
-        FrmAddInManager.TabCommand.Focus();
+       
         MAddinManagerBase.AddinManager.SaveToAimIni();
         CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+        LispFunctionItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.LispFunctions);
     }
     private void RemoveAddinClick()
     {
@@ -381,6 +416,42 @@ public class AddInManagerViewModel : ViewModelBase
                     MAddinManagerBase.ActiveCmdItem = null;
                 }
                 CommandItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.Commands);
+            }
+            if (IsTabLispSelected)
+            {
+                foreach (var parent in LispFunctionItems)
+                {
+                    if (parent.IsInitiallySelected)
+                    {
+                        MAddinManagerBase.ActiveLisp = parent.Addin;
+                        MAddinManagerBase.ActiveLispItem = parent.AddinItem;
+                        if (MAddinManagerBase.ActiveLisp != null)
+                        {
+                            MAddinManagerBase.AddinManager.LispFunctions.RemoveAddIn(MAddinManagerBase.ActiveLisp);
+                        }
+                        MAddinManagerBase.ActiveLisp = null;
+                        MAddinManagerBase.ActiveLispItem = null;
+                        LispFunctionItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.LispFunctions);
+                        return;
+                    }
+                    foreach (var addinChild in parent.Children)
+                    {
+                        if (addinChild.IsInitiallySelected)
+                        {
+                            //Set Value to run for add-in command
+                            MAddinManagerBase.ActiveLisp = parent.Addin;
+                            MAddinManagerBase.ActiveLispItem = addinChild.AddinItem;
+                        }
+                    }
+                }
+
+                if (MAddinManagerBase.ActiveLispItem != null)
+                {
+                    MAddinManagerBase.ActiveLisp.RemoveItem(MAddinManagerBase.ActiveLispItem);
+                    MAddinManagerBase.ActiveLisp = null;
+                    MAddinManagerBase.ActiveLispItem = null;
+                }
+                LispFunctionItems = FreshTreeItems(false, MAddinManagerBase.AddinManager.LispFunctions);
             }
             //Save All SetTings
             MAddinManagerBase.AddinManager.SaveToAimIni();

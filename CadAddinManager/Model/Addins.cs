@@ -84,18 +84,46 @@ public abstract class Addins
                 List<MethodInfo> methodInfos = type2.GetMethods().ToList();
                 foreach (MethodInfo methodInfo in methodInfos)
                 {
-                    var commandAtt = methodInfo.GetCustomAttributes(typeof(CommandMethodAttribute), false).FirstOrDefault();
-                    if (commandAtt != null)
+                    switch (type)
                     {
-                        CommandMethodAttribute attribute = commandAtt as CommandMethodAttribute;
-                        string name = $"{methodInfo.DeclaringType.Name}.{methodInfo.Name}";
-                        AddinItem item = new AddinItem(originalAssemblyFilePath, Guid.NewGuid(), name, type)
-                        {
-                            MethodInfo = methodInfo,
-                            Command = attribute,
-                        };
-                        list.Add(item);
+                        case AddinType.Invalid:
+                            break;
+                        case AddinType.Command:
+                            var commandAtt = methodInfo.GetCustomAttributes(typeof(CommandMethodAttribute), false).FirstOrDefault();
+                            if (commandAtt != null)
+                            {
+                                CommandMethodAttribute attribute = commandAtt as CommandMethodAttribute;
+                                string name = $"{methodInfo.DeclaringType.Name}.{methodInfo.Name}";
+                                AddinItem item = new AddinItem(originalAssemblyFilePath, Guid.NewGuid(), name, type)
+                                {
+                                    MethodInfo = methodInfo,
+                                    Command = attribute,
+                                };
+                                list.Add(item);
+                            }
+                            if(list.Count>0) list= list.OrderBy(x=>x.Command.GlobalName).ToList();
+                            break;
+                        case AddinType.LispFunction:
+                            var lispFuncAtt = methodInfo.GetCustomAttributes(typeof(LispFunctionAttribute), false).FirstOrDefault();
+                            if (lispFuncAtt != null)
+                            {
+                                LispFunctionAttribute attribute = lispFuncAtt as LispFunctionAttribute;
+                                string name = $"{methodInfo.DeclaringType.Name}.{methodInfo.Name}";
+                                AddinItem item = new AddinItem(originalAssemblyFilePath, Guid.NewGuid(), name, type)
+                                {
+                                    MethodInfo = methodInfo,
+                                    LispFunction = attribute,
+                                };
+                                list.Add(item);
+                            }
+                            if(list.Count>0) list = list.OrderBy(x=>x.LispFunction.GlobalName).ToList();
+                            break;
+                        case AddinType.Mixed:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(type), type, null);
                     }
+                  
                 }
             }
             catch (Exception e)
@@ -103,7 +131,6 @@ public abstract class Addins
                 throw new ArgumentException(e.ToString());
             }
         }
-        if(list.Count>0) return list.OrderBy(x=>x.Command.GlobalName).ToList();
         return list;
     }
 

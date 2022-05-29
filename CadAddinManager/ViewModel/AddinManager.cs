@@ -9,15 +9,15 @@ namespace CadAddinManager.ViewModel;
 
 public class AddinManager
 {
-    public AddinsApplication Applications => applications;
-    public int AppCount => applications.Count;
+    public AddinsApplication LispFunctions => _lispFunctions;
+    public int AppCount => _lispFunctions.Count;
     public AddinsCommand Commands => commands;
     public int CmdCount => commands.Count;
 
     public AddinManager()
     {
         commands = new AddinsCommand();
-        applications = new AddinsApplication();
+        _lispFunctions = new AddinsApplication();
         GetIniFilePaths();
         ReadAddinsFromAimIni();
     }
@@ -51,7 +51,7 @@ public class AddinManager
     {
         if (!commands.RemoveAddIn(addin))
         {
-            applications.RemoveAddIn(addin);
+            _lispFunctions.RemoveAddIn(addin);
         }
     }
 
@@ -63,12 +63,14 @@ public class AddinManager
             return addinType;
         }
         List<AddinItem> list = null;
+        List<AddinItem> list2 = null;
         try
         {
             assemLoader.HookAssemblyResolve();
 
             Assembly assembly = assemLoader.LoadAddinsToTempFolder(filePath, true);
             list = commands.LoadItems(assembly, filePath, AddinType.Command);
+            list2 = _lispFunctions.LoadItems(assembly, filePath, AddinType.LispFunction);
         }
         catch (Exception e)
         {
@@ -84,6 +86,12 @@ public class AddinManager
             commands.AddAddIn(addin);
             addinType = AddinType.Command;
         }
+        if (list2 != null && list2.Count > 0)
+        {
+            var addin = new Addin(filePath, list2);
+            _lispFunctions.AddAddIn(addin);
+            addinType = AddinType.LispFunction;
+        }
         return addinType;
     }
 
@@ -94,7 +102,7 @@ public class AddinManager
             throw new FileNotFoundException("can't find the revit.ini file from: " + revitIniFile.FilePath);
         }
         commands.Save(revitIniFile);
-        applications.Save(revitIniFile);
+        _lispFunctions.Save(revitIniFile);
     }
 
     public void SaveAsLocal(AddInManagerViewModel vm, string filepath)
@@ -122,9 +130,9 @@ public class AddinManager
             }
             var file = new IniFile(Path.Combine(directoryName, DefaultSetting.IniName));
             value.SaveToLocalIni(file);
-            if (applications.AddinDict.ContainsKey(key))
+            if (_lispFunctions.AddinDict.ContainsKey(key))
             {
-                var addin = applications.AddinDict[key];
+                var addin = _lispFunctions.AddinDict[key];
                 addin.SaveToLocalIni(file);
             }
         }
@@ -138,7 +146,7 @@ public class AddinManager
             FileUtils.SetWriteable(AimIniFile.FilePath);
         }
         commands.Save(aimIniFile);
-        applications.Save(aimIniFile);
+        _lispFunctions.Save(aimIniFile);
     }
 
     public bool HasItemsToSave()
@@ -150,7 +158,7 @@ public class AddinManager
                 return true;
             }
         }
-        foreach (var addin2 in applications.AddinDict.Values)
+        foreach (var addin2 in _lispFunctions.AddinDict.Values)
         {
             if (addin2.Save)
             {
@@ -196,9 +204,9 @@ public class AddinManager
                     manifestFile.Commands.Add(addinItem);
                 }
             }
-            if (applications.AddinDict.ContainsKey(key))
+            if (_lispFunctions.AddinDict.ContainsKey(key))
             {
-                var addin = applications.AddinDict[key];
+                var addin = _lispFunctions.AddinDict[key];
                 foreach (var addinItem2 in addin.ItemList)
                 {
                     if (addinItem2.Save)
@@ -206,11 +214,11 @@ public class AddinManager
                         manifestFile.Applications.Add(addinItem2);
                     }
                 }
-                dictionary.Add(key, applications.AddinDict[key]);
+                dictionary.Add(key, _lispFunctions.AddinDict[key]);
             }
             manifestFile.SaveAs(filePath);
         }
-        foreach (var keyValuePair2 in applications.AddinDict)
+        foreach (var keyValuePair2 in _lispFunctions.AddinDict)
         {
             var key2 = keyValuePair2.Key;
             var value2 = keyValuePair2.Value;
@@ -259,7 +267,7 @@ public class AddinManager
         return text;
     }
 
-    private readonly AddinsApplication applications;
+    private readonly AddinsApplication _lispFunctions;
 
     private readonly AddinsCommand commands;
 

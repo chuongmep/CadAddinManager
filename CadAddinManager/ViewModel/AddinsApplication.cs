@@ -30,7 +30,7 @@ public class AddinsApplication : Addins
             return false;
         }
 
-        AddItem(new AddinItem(AddinType.Application)
+        AddItem(new AddinItem(AddinType.LispFunction)
         {
             Name = string.Empty,
             AssemblyPath = text2,

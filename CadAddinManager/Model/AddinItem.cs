@@ -36,7 +36,7 @@ public class AddinItem : IAddinNode
     public void SaveToManifest()
     {
         var manifestFile = new ManifestFile(name + DefaultSetting.FormatExAddin);
-        if (AddinType == AddinType.Application)
+        if (AddinType == AddinType.LispFunction)
         {
             manifestFile.Applications.Add(this);
         }
@@ -77,6 +77,7 @@ public class AddinItem : IAddinNode
     public string FullClassName { get; set; }
     public MethodInfo MethodInfo { get; set; }
     public CommandMethodAttribute Command { get; set; }
+    public LispFunctionAttribute LispFunction { get; set; }
     public string Name
     {
         get

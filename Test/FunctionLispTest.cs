@@ -4,6 +4,7 @@ using Autodesk.AutoCAD.Runtime;
 
 public class FunctionLispTest
 {
+    //Test : (displayfullname "First" "Last")
     [LispFunction("DisplayFullName")]
     public static void DisplayFullName(ResultBuffer rbArgs)
 
