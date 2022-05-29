@@ -1,6 +1,7 @@
-﻿using Autodesk.AutoCAD.ApplicationServices.Core;
+﻿using System.Windows;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
+using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
 public class FunctionLispTest
 {
@@ -46,6 +47,7 @@ public class FunctionLispTest
 
 
             Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage("\nName: " + strVal1 + " " + strVal2);
+            MessageBox.Show("Updated");
         }
     }
 }
