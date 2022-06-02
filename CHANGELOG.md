@@ -1,4 +1,7 @@
 # Changelog
+- 2022-06-02 **1.0.7**
+  - Support event ArrowKeyDown and ArrowKeyUp to move between items search and TreeView
+  - Support press key Esc from keyboard to close Form.
 - 2022-05-29 **1.0.6**
   - Add tab lisp function and support reload update lisp function 
 - 2022-05-22 **1.0.5**

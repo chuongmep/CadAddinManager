@@ -13,6 +13,7 @@
     MinHeight="400"
     d:DataContext="{d:DesignInstance viewModel:AddInManagerViewModel}"
     FocusManager.FocusedElement="{x:Reference tbxSearch}"
+    PreviewKeyDown="CloseFormEvent"
     Icon="../Resources/dev.ico"
     mc:Ignorable="d">
     <Window.Resources>
@@ -47,7 +48,8 @@
                 Grid.Row="0"
                 Margin="5,0,5,0"
                 VerticalAlignment="Center"
-                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                PreviewKeyDown="HandleTextboxKeyPress">
                 <TextBox.Resources>
                     <VisualBrush
                         x:Key="tbxText"
@@ -91,6 +93,7 @@
                     FontSize="14"
                     Foreground="SteelBlue"
                     Header="Command"
+                    PreviewKeyDown="HandleTreeViewCommandKeyPress"
                     IsSelected="{Binding IsTabCmdSelected}">
                     <control:ExtendedTreeView
                         x:Name="TreeViewCommand"
@@ -152,6 +155,7 @@
                     FontSize="14"
                     Foreground="SteelBlue"
                     Header="Lisp Function"
+                    PreviewKeyDown="HandleTreeViewLispKeyPress"
                     IsSelected="{Binding IsTabLispSelected}">
                     <control:ExtendedTreeView
                         x:Name="TreeViewLispFunction"
