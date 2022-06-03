@@ -70,7 +70,52 @@ Execute a command easily  :
 
  6.Use faceless when you change code or rebuild.
 
----
+### Lisp Function
+Execute a Lisp Function easily  :
+1. Create a class library use .NET
+
+2. Add library Autocad API or Civil3D API
+
+3. Create a Lisp Function, example:
+
+ ```cs
+    [LispFunction("DisplayFullName")]
+    public static void DisplayFullName(ResultBuffer rbArgs)
+    {
+        if (rbArgs != null)
+        {
+            string strVal1 = "";
+            string strVal2 = "";
+            int nCnt = 0;
+            foreach (TypedValue rb in rbArgs)
+            {
+                if (rb.TypeCode == (int) LispDataType.Text)
+                {
+                    switch (nCnt)
+                    {
+                        case 0:
+                            strVal1 = rb.Value.ToString();
+                            break;
+                        case 1:
+                            strVal2 = rb.Value.ToString();
+                            break;
+                    }
+                    nCnt = nCnt + 1;
+                }
+            }
+            Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage("\nName: " + strVal1 + " " + strVal2);
+            MessageBox.Show("Updated");
+        }
+    }
+ ```
+4.Load To Add-in Manager.
+
+5.Double click to run command.
+
+6.Use Reload when you change code or rebuild.
+
+7.Run Lisp Function [example](https://github.com/chuongmep/CadAddinManager/blob/9982d2a2b32591f508c0ce0e55e0d636ba38092c/Test/FunctionLispTest.cs#L9-L34) : `(displayfullname "First" "Last") `
+
 ### Trace/Debug
 
 - [x] Show/Hide result inside Dockpanel Autocad and Civil3D.
