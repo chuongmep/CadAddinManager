@@ -110,11 +110,9 @@ Execute a Lisp Function easily  :
  ```
 4.Load To Add-in Manager.
 
-5.Double click to run command.
+5.Use Reload when you change code or rebuild.
 
-6.Use Reload when you change code or rebuild.
-
-7.Run Lisp Function [example](https://github.com/chuongmep/CadAddinManager/blob/9982d2a2b32591f508c0ce0e55e0d636ba38092c/Test/FunctionLispTest.cs#L9-L34) : `(displayfullname "First" "Last") `
+6.Run Lisp Function [example](https://github.com/chuongmep/CadAddinManager/blob/9982d2a2b32591f508c0ce0e55e0d636ba38092c/Test/FunctionLispTest.cs#L9-L34) : `(displayfullname "First" "Last") `
 
 ### Trace/Debug
 
