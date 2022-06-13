@@ -30,6 +30,7 @@
         <ListBox
             x:Name="listBox_LogMessages"
             FontFamily="{Binding DisplayFontFamily}"
+            SelectionMode="Extended"
             ItemsSource="{Binding MessageList}"
             >
             <ListBox.ItemTemplate>
