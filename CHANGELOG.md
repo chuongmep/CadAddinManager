@@ -1,4 +1,6 @@
 # Changelog
+- 2022-12-21 **1.0.8**
+  - Fix issue load relative path with window parallel macOS.
 - 2022-06-02 **1.0.7**
   - Support event ArrowKeyDown and ArrowKeyUp to move between items search and TreeView
   - Support press key Esc from keyboard to close Form.
