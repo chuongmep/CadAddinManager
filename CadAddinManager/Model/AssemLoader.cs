@@ -434,19 +434,24 @@ public class AssemLoader
             foreach (var assembly2 in AppDomain.CurrentDomain.GetAssemblies())
             {
                
-                if (String.Compare(assembly2.GetName().Name, "accoremgd", StringComparison.OrdinalIgnoreCase) == 0)
+                if (String.Compare(assembly2.GetName().Name.ToLower(), "accoremgd", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     CadApiAssemblyFullName = assembly2.GetName().Name;
                     break;
                 }
 
-                if (String.Compare(assembly2.GetName().Name, "acdbmgd", StringComparison.OrdinalIgnoreCase) == 0)
+                if (String.Compare(assembly2.GetName().Name.ToLower(), "acdbmgd", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     CadApiAssemblyFullName = assembly2.GetName().Name;
                     break;
                 }
 
-                if (String.Compare(assembly2.GetName().Name, "mscorlib", StringComparison.OrdinalIgnoreCase) == 0)
+                if (String.Compare(assembly2.GetName().Name.ToLower(), "mscorlib", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    CadApiAssemblyFullName = assembly2.GetName().Name;
+                    break;
+                }
+                if (String.Compare(assembly2.GetName().Name.ToLower(), "fabricationapi", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     CadApiAssemblyFullName = assembly2.GetName().Name;
                     break;
