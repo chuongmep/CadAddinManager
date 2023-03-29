@@ -39,5 +39,10 @@
     <PackageReference Include="Chuongmep.Acad.Api.accoremgd" Version="$(CADVersion).*" />
     <PackageReference Include="Chuongmep.Acad.Api.acdbmgd" Version="$(CADVersion).*" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="FileSample\sample_base.dwg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
