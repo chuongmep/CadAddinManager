@@ -4,6 +4,7 @@ using Autodesk.AutoCAD.ApplicationServices.Core;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
+using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 
 namespace Test;
 

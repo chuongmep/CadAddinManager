@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Resources;
+using System.Windows;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
-
+using CadApp = Autodesk.AutoCAD.ApplicationServices.Application;
 namespace Test;
 
 public class ExtractFileFromResources
+
 {
     [CommandMethod("InsertBlockFromResources")]
     public void Execute()
@@ -16,6 +20,69 @@ public class ExtractFileFromResources
         // this path test is from folder FileSample published
         string path = @"D:\API\CAD\CadAddinManager\Test\FileSample\sample_base.dwg";
         InsertBlock(path, new Point3d(0, 0, 0));
+    }
+
+    [CommandMethod("GetResource")]
+    public void GetResource()
+    {
+        string[] resourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+        foreach(string resourceName in resourceNames)
+        {
+            //this one return Test.g.resources
+            MessageBox.Show(resourceName);
+        }
+    }
+
+    [CommandMethod("ExtractFile")]
+    public static void RunDocumentCommand()
+    {
+        var dwg = CadApp.DocumentManager.MdiActiveDocument;
+        var ed = dwg.Editor;
+
+        try
+        {
+            var blkFile = ExtractFileFromResource("MyBlock");
+            if (!string.IsNullOrEmpty(blkFile))
+            {
+                //Use this drawing file from AutoCAD's temp file location
+                // such as insert this block file into current drawing
+                CadApp.ShowAlertDialog(
+                    "Block file saved in project resources has been extracted!");
+
+                File.Delete(blkFile);
+            }
+        }
+        catch (System.Exception ex)
+        {
+            ed.WriteMessage("\nError: {0}", ex.Message);
+            ed.WriteMessage("\nStack Trace: {0}", ex.StackTrace);
+        }
+        finally
+        {
+            Autodesk.AutoCAD.Internal.Utils.PostCommandPrompt();
+        }
+    }
+    public static string ExtractFileFromResource(string resourceName)
+    {
+        dynamic preferences = CadApp.Preferences;
+        string filePathName = 
+            (string)preferences.Files.TempFilePath + "\\" + resourceName + ".dwg";
+        try
+        {
+            ResourceManager ResourceManager = new ResourceManager("Test.g.resources", Assembly.GetExecutingAssembly());
+            var bytes = (byte[])ResourceManager.GetObject(resourceName);
+            if (File.Exists(filePathName)) File.Delete(filePathName);
+            using (var stream = new FileStream(filePathName, FileMode.Create, FileAccess.Write))
+            {
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Close();
+            }
+            return filePathName;
+        }
+        catch
+        {
+            return "";
+        }
     }
 
     private static ObjectId InsertBlock(string path, Point3d loc)

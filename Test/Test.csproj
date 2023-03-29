@@ -36,13 +36,25 @@
     <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Chuongmep.Acad.Api.accoremgd" Version="$(CADVersion).*" />
-    <PackageReference Include="Chuongmep.Acad.Api.acdbmgd" Version="$(CADVersion).*" />
+    <PackageReference Include="Chuongmep.Acad.Api.acmgd" Version="$(CADVersion).*">
+      <ExcludeAssets>runtime </ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Chuongmep.Acad.Api.acdbmgd" Version="$(CADVersion).*">
+      <ExcludeAssets>runtime </ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Chuongmep.Acad.Api.accoremgd" Version="$(CADVersion).*">
+      <ExcludeAssets>runtime </ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Chuongmep.Acad.Api.AdWindows" Version="$(CADVersion).*">
+      <ExcludeAssets>runtime </ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="FileSample\sample_base.dwg">
+    <None Remove="FileSample\sample_base.dwg" />
+    <Resource Include="FileSample\sample_base.dwg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Resource>
   </ItemGroup>
 
 </Project>
