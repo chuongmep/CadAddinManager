@@ -201,6 +201,10 @@ Thanks for providing a free All product IDE for this project.
 - Credit to [icons8.com](https://icons8.com) for the Cad Add-in Manager icons.
 - Credit to [Nice3point](https://github.com/Nice3point) for the CI/CD template.
 
+## Known Issues
+
+- [Ribbon not show when open startup Autocad or Civil3d](https://github.com/chuongmep/CadAddinManager/wiki/Fix-Problem-Ribbon-Not-Show).
+
 ## Learning Resources
 
 - <a href="https://adndevblog.typepad.com/autocad/" target="_blank">ADN Dev Blog</a>
