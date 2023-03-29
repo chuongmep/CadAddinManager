@@ -1,4 +1,8 @@
 # Changelog
+- 2023-03-29 **1.0.9**
+  - Fixed issue load add-in out range exception parameter name [#2](https://github.com/chuongmep/CadAddinManager/issues/2)
+  - Fixed issue load add-in use CAD MEP [#6](https://github.com/chuongmep/CadAddinManager/issues/6).
+  - Fixed issue load Ribbon load with civil3d 2023.
 - 2022-12-21 **1.0.8**
   - Fix issue load relative path with window parallel macOS.
 - 2022-06-02 **1.0.7**
