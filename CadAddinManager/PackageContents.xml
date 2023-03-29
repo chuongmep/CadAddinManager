@@ -16,7 +16,7 @@
       <Commands>
         <Command Local="AddInManagerManual" Global="AddInManagerManual" />
         <Command Local="AddInManagerFaceLess" Global="AddInManagerFaceLess" />
-        <Command Local="InitAddinManager" Global="InitAddinManager" StartupCommand="True" />
+        <Command Local="InitAddinManager" Global="InitAddinManager" LoadOnAutoCADStartup="True" StartupCommand="True" />
       </Commands>
     </ComponentEntry>
   </Components>
