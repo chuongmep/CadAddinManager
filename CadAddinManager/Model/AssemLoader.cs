@@ -278,23 +278,30 @@ public class AssemLoader
                 {
                     ','
                 });
-                var text2 = array[0];
+                var ass = array[0];
                 if (array.Length > 1)
                 {
                     var text3 = array[2];
-                    if (text2.EndsWith(".resources", StringComparison.CurrentCultureIgnoreCase) &&
+                    if (ass.EndsWith(".resources", StringComparison.CurrentCultureIgnoreCase) &&
                         !text3.EndsWith("neutral", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        text2 = text2.Substring(0, text2.Length - ".resources".Length);
+                        ass = ass.Substring(0, ass.Length - ".resources".Length);
                     }
-
-                    text = SearchAssemblyFileInTempFolder(text2);
+                    // Skip searching for the assembly if assembly with specified name is already loaded
+                    foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                    {
+                        if (String.Compare(assembly.GetName().Name, ass, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            return null;
+                        }
+                    }
+                    text = SearchAssemblyFileInTempFolder(ass);
                     if (File.Exists(text))
                     {
                         return LoadAddin(text);
                     }
 
-                    text = SearchAssemblyFileInOriginalFolders(text2);
+                    text = SearchAssemblyFileInOriginalFolders(ass);
                 }
             }
 
@@ -322,7 +329,8 @@ public class AssemLoader
         {
             var array = new string[] {".dll", ".exe"};
             var text = string.Empty;
-            var str = assemName.Substring(0, assemName.IndexOf(','));
+            var strLength = assemName.IndexOf(',');
+            var str = strLength == -1 ? assemName : assemName.Substring(0, strLength);
             foreach (var str2 in array)
             {
                 text = tempFolder + "\\" + str + str2;
@@ -349,7 +357,10 @@ public class AssemLoader
             ".exe"
         };
         string text;
-        var text2 = assemName.Substring(0, assemName.IndexOf(','));
+        // Avoid ArgumentOutOfRangeException from .Substring() by checking length parameter
+        var strLength = assemName.IndexOf(',');
+        var text2 = strLength == -1 ? assemName : assemName.Substring(0, strLength);
+        // var text2 = assemName.Substring(0, assemName.IndexOf(','));
         foreach (var str in array)
         {
             text = dotnetDir + "\\" + text2 + str;
