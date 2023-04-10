@@ -1,0 +1,247 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.Colors;
+using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
+using Autodesk.AutoCAD.Runtime;
+using CsvHelper;
+using Application = Autodesk.AutoCAD.ApplicationServices.Application;
+using Trace = System.Diagnostics.Trace;
+
+namespace Test;
+
+public class ExtractLocation
+{
+    [CommandMethod("ExtractLocation")]
+    public void GetAllXrefBlock()
+    {
+        Document doc = Application.DocumentManager.MdiActiveDocument;
+        Editor ed = doc.Editor;
+        Database database = doc.Database;
+
+        List<AssignmentData> assignmentDatas = new List<AssignmentData>();
+        using (Transaction tr = database.TransactionManager.StartTransaction())
+        {
+            PromptSelectionResult selRes = ed.GetSelection();
+            if (selRes.Status == PromptStatus.OK)
+            {
+                SelectionSet selSet = selRes.Value;
+                ObjectId[] objectIds = selSet.GetObjectIds();
+                Trace.WriteLine("Number of selected objects: " + objectIds.Length);
+                foreach (ObjectId objectId in objectIds)
+                {
+                    // Get the block table record
+                    BlockReference blockReference =
+                        (BlockReference) doc.TransactionManager.GetObject(objectId, OpenMode.ForRead);
+                    // Get the block table record
+                    GetInfoRecord(blockReference, ref assignmentDatas);
+                }
+            }
+
+            tr.Commit();
+        }
+
+        string filepath = @"D:/test.csv";
+        ExportToCsv(assignmentDatas, filepath, true, ",");
+        Process.Start(filepath);
+    }
+
+    /// <summary>
+    ///  return information of block record
+    /// </summary>
+    /// <param name="blockReference"></param>
+    /// <param name="datas">list data </param>
+    public void GetInfoRecord(BlockReference blockReference, ref List<AssignmentData> datas)
+    {
+        Document doc = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument;
+        BlockTableRecord tableRecord =
+            (BlockTableRecord) doc.TransactionManager.GetObject(blockReference.BlockTableRecord, OpenMode.ForRead);
+        Matrix3d wcs = doc.Editor.CurrentUserCoordinateSystem.Inverse();
+        CoordinateSystem3d cs = wcs.CoordinateSystem3d;
+
+        // Transform from WCS to UCS
+        // Matrix3d mat =
+        //     Matrix3d.AlignCoordinateSystem(
+        //         Point3d.Origin,
+        //         Vector3d.XAxis,
+        //         Vector3d.YAxis,
+        //         Vector3d.ZAxis,
+        //         cs.Origin,
+        //         cs.Xaxis,
+        //         cs.Yaxis,
+        //         cs.Zaxis
+        //     );
+        foreach (ObjectId id3 in tableRecord)
+        {
+            Entity entity3 = (Entity) doc.TransactionManager.GetObject(id3, OpenMode.ForRead);
+            if (entity3 is BlockReference blockRef2)
+            {
+                GetInfoRecord(blockRef2, ref datas);
+                // Get Attribute of block
+                string cap = String.Empty;
+                string lid = String.Empty;
+                Point3d? toolPosition = null;
+                Point3d? lopcPosition = null;
+                foreach (ObjectId id4 in blockRef2.AttributeCollection)
+                {
+                    AttributeReference attRef =
+                        (AttributeReference) doc.TransactionManager.GetObject(id4, OpenMode.ForRead);
+                    //if tag of attribute is "LPOC_ID" then get value of attribute
+                    if (attRef.Tag == "LPOC_ID")
+                    {
+                        Trace.WriteLine("LPOC Name: " + attRef.TextString);
+                        lopcPosition = attRef.Position;
+                        Trace.WriteLine($"LPOC Position: " + lopcPosition);
+                        Point3d curPt  = lopcPosition.Value.TransformBy(wcs);
+                        datas.Add(new AssignmentData()
+                        {
+                            Name = attRef.TextString, X = curPt.X.ToString(),
+                            Y = curPt.Y.ToString()
+                        });
+                    }
+
+                    if (attRef.Tag == "MICAP")
+                    {
+                        cap = attRef.TextString;
+                    }
+
+                    if (attRef.Tag == "LID")
+                    {
+                        lid = attRef.TextString;
+                        toolPosition = attRef.Position;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(cap))
+                {
+                    string toolId = string.Join("-", lid, cap);
+                    Trace.WriteLine(toolId);
+                    Trace.WriteLine(toolPosition.ToString());
+                    Point3d curPt  = toolPosition.Value.TransformBy(wcs);
+                    datas.Add(new AssignmentData()
+                        {Name = toolId, X = curPt.X.ToString(), Y = curPt.Y.ToString()});
+                }
+            }
+        }
+    }
+
+    public static void DrawPolyline(Point2d startPoint, Point2d endPoint, string layerName, Color layerColor,
+        double lineWidth)
+    {
+        // Get the current document and database
+        Document doc = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument;
+        Database db = doc.Database;
+
+        // Start a transaction
+        using (Transaction tr = db.TransactionManager.StartTransaction())
+        {
+            // Open the Block table for read
+            BlockTable bt = tr.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+
+            // Open the Block table record Model space for write
+            BlockTableRecord btr = tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+
+            // Create a new polyline
+            Polyline pline = new Polyline();
+
+            // Add the start and end points to the polyline
+            pline.AddVertexAt(0, startPoint, 0, lineWidth, lineWidth);
+            pline.AddVertexAt(1, endPoint, 0, lineWidth, lineWidth);
+
+            // Set the layer for the polyline
+            if (!bt.Has(layerName))
+            {
+                // Create the layer if it doesn't exist
+                LayerTable lt = tr.GetObject(db.LayerTableId, OpenMode.ForWrite) as LayerTable;
+                LayerTableRecord ltr = new LayerTableRecord();
+                ltr.Name = layerName;
+                ltr.Color = layerColor;
+                lt.Add(ltr);
+                tr.AddNewlyCreatedDBObject(ltr, true);
+                pline.Layer = layerName;
+            }
+            else
+            {
+                pline.Layer = layerName;
+            }
+
+            // Add the polyline to the drawing
+            btr.AppendEntity(pline);
+            tr.AddNewlyCreatedDBObject(pline, true);
+
+            // Commit the transaction
+            tr.Commit();
+        }
+    }
+
+    public void Example()
+    {
+        // Define the start and end points, layer name, layer color, and line weight
+        Point2d startPoint = new Point2d(0, 0);
+        Point2d endPoint = new Point2d(10, 10);
+        string layerName = "0";
+        Color layerColor = Color.FromColorIndex(ColorMethod.ByAci, 1);
+        double lineWidth = 5.0;
+
+        // Call the method to draw the polyline
+        DrawPolyline(startPoint, endPoint, layerName, layerColor, lineWidth);
+    }
+
+    public static void ExportToCsv<T>(List<T> data, string filePath, bool includeHeader = true, string delimiter = ",")
+    {
+        var sb = new StringBuilder();
+
+        // Get the property names from the object's properties
+        PropertyInfo[] properties = typeof(T).GetProperties();
+        if (includeHeader)
+        {
+            string header = string.Join(delimiter, properties.Select(p => p.Name));
+            sb.AppendLine(header);
+        }
+
+        // Add the data rows to the CSV string
+        foreach (T item in data)
+        {
+            string row = string.Join(delimiter, properties.Select(p => (p.GetValue(item, null) ?? "").ToString()));
+            sb.AppendLine(row);
+        }
+
+        // Write the CSV string to a file and fix being used by another process
+        using (var writer = new StreamWriter(filePath, true, Encoding.UTF8))
+        {
+            writer.Write(sb.ToString());
+        }
+    }
+
+    public static void ExportToCsv2<T>(List<T> data, string filePath, bool includeHeader = true, string delimiter = ",")
+    {
+        using (var writer = new StreamWriter(filePath))
+        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+        {
+            if (includeHeader)
+            {
+                // Write the header row
+                csv.WriteHeader<T>();
+                csv.NextRecord();
+            }
+
+            // Write the data rows
+            csv.WriteRecords(data);
+        }
+    }
+
+    public class AssignmentData
+    {
+        public string Name { get; set; }
+        public string X { get; set; }
+        public string Y { get; set; }
+    }
+}

@@ -8,7 +8,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWpf>true</UseWpf>
-    <Configurations>Debug A23</Configurations>
+    <Configurations>Debug A22;Debug A23</Configurations>
     <Configurations>$(Configurations);Release A20;Release A21;Release A22;Release A23</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('A20'))">
@@ -48,6 +48,7 @@
     <PackageReference Include="Chuongmep.Acad.Api.AdWindows" Version="$(CADVersion).*">
       <ExcludeAssets>runtime </ExcludeAssets>
     </PackageReference>
+    <PackageReference Include="CsvHelper" Version="16.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
