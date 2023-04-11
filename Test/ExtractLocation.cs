@@ -53,9 +53,9 @@ public class ExtractLocation
             tr.Commit();
         }
 
-        string filepath = @"D:/test.csv";
-        ExportToCsv(assignmentDatas, filepath, true, ",");
-        Process.Start(filepath);
+        // string filepath = @"D:/test.csv";
+        // ExportToCsv(assignmentDatas, filepath, true, ",");
+        // Process.Start(filepath);
     }
 
     void TestTransform()
@@ -147,7 +147,9 @@ public class ExtractLocation
                     {
                         // Get position of block reference
                         Point3d position = blockReference.Position;
-                        curPt = position.TransformBy(wcs);
+                        Matrix3d inverse = blockReference.BlockTransform.Inverse();
+                        var total = wcs * inverse;
+                        curPt = position.TransformBy(total);
                         stepPt = attRef.Position.TransformBy(wcs);
                         // curPt add stepPt
                         curPt = curPt.Add(stepPt.GetAsVector());
@@ -159,8 +161,8 @@ public class ExtractLocation
                             Y = curPt.Y.ToString(CultureInfo.InvariantCulture)
                         });
                         string textCheck = "F10A2-2-F43V-He-E43-64";
-                        string textCheck2 = "F10A2-2-F39V-He-E39-63(PT)";
-                        if (attRef.TextString == textCheck2)
+                        // string textCheck2 = "F10A2-2-F39V-He-E39-63(PT)";
+                        if (attRef.TextString == textCheck)
                         {
                             MessageBox.Show(curPt.ToString());
                             
@@ -172,22 +174,32 @@ public class ExtractLocation
                     if (attRef.Tag == "MICAP")
                     {
                         cap = attRef.TextString;
-                        toolPosition = attRef.Position;
+                        Point3d position = blockReference.Position;
+                        Matrix3d inverse = blockReference.BlockTransform.Inverse();
+                        var total = wcs * inverse;
+                        curPt = position.TransformBy(total);
+                        stepPt = attRef.Position.TransformBy(wcs);
+                        // curPt add stepPt
+                        curPt = curPt.Add(stepPt.GetAsVector());
                     }
 
                     if (attRef.Tag == "LID")
                     {
                         lid = attRef.TextString;
-                        toolPosition = attRef.Position;
+                        cap = attRef.TextString;
+                        Point3d position = blockReference.Position;
+                        Matrix3d inverse = blockReference.BlockTransform.Inverse();
+                        var total = wcs * inverse;
+                        curPt = position.TransformBy(total);
+                        stepPt = attRef.Position.TransformBy(wcs);
+                        // curPt add stepPt
+                        curPt = curPt.Add(stepPt.GetAsVector());
                     }
                 }
 
                 if (!string.IsNullOrEmpty(cap))
                 {
                     string toolId = string.Join("-", lid, cap);
-                    // Trace.WriteLine(toolId);
-                    // Trace.WriteLine(toolPosition.ToString());
-                    curPt = ConvertPointWcsToUcs(toolPosition.Value);
                     datas.Add(new AssignmentData()
                     {
                         Name = toolId,
