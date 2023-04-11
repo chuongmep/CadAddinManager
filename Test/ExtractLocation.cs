@@ -53,9 +53,9 @@ public class ExtractLocation
             tr.Commit();
         }
 
-        // string filepath = @"D:/test.csv";
-        // ExportToCsv(assignmentDatas, filepath, true, ",");
-        // Process.Start(filepath);
+        string filepath = @"D:/test.csv";
+        ExportToCsv(assignmentDatas, filepath, true, ",");
+        Process.Start(filepath);
     }
 
     void TestTransform()
@@ -147,13 +147,14 @@ public class ExtractLocation
                     {
                         // Get position of block reference
                         Point3d position = blockReference.Position;
-                        Matrix3d inverse = blockReference.BlockTransform.Inverse();
-                        var total = wcs * inverse;
-                        curPt = position.TransformBy(total);
+                        curPt = position.TransformBy(wcs);
+                        //create stepPt to calc translate position
                         stepPt = attRef.Position.TransformBy(wcs);
                         // curPt add stepPt
                         curPt = curPt.Add(stepPt.GetAsVector());
-                        // rotate block 
+                        // rotate 
+                        // Matrix3d rotation = Matrix3d.Rotation(blockReference.Rotation, Vector3d.ZAxis, blockReference.Position);
+                        // curPt = curPt.TransformBy(rotation);
                         datas.Add(new AssignmentData()
                         {
                             Name = attRef.TextString,
@@ -161,13 +162,10 @@ public class ExtractLocation
                             Y = curPt.Y.ToString(CultureInfo.InvariantCulture)
                         });
                         string textCheck = "F10A2-2-F43V-He-E43-64";
-                        // string textCheck2 = "F10A2-2-F39V-He-E39-63(PT)";
+                        string textCheck2 = "F10A2-2-F39V-He-E39-63(PT)";
                         if (attRef.TextString == textCheck)
                         {
                             MessageBox.Show(curPt.ToString());
-                            
-                            // Trace.WriteLine("LPOC Name: " + attRef.TextString);
-                            // Trace.WriteLine($"LPOC Position: " + lopcPosition);
                         }
                     }
 
