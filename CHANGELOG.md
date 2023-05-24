@@ -1,5 +1,8 @@
 # Changelog
 - 2023-05-24 **2.0.0**
+  - Fixed conflict load assembly version 2022.
+  - Separate load assembly for each version.
+- 2023-05-24 **2.0.0**
   - Add support Version 2024
   - Improvement user interface
 - 2023-03-29 **1.0.9**
