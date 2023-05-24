@@ -1,10 +1,10 @@
-﻿using System.Windows.Controls;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 using Autodesk.AutoCAD.Runtime;
 using Autodesk.Windows;
 using CadAddinManager.Command;
 using CadAddinManager.View.Control;
 using ImageSource = System.Windows.Media.ImageSource;
+using Orientation = System.Windows.Controls.Orientation;
 
 namespace CadAddinManager;
 

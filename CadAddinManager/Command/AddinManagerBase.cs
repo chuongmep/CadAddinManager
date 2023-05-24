@@ -10,6 +10,7 @@ using CadAddinManager.View;
 using CadAddinManager.ViewModel;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 using Exception = System.Exception;
+using MessageBox = System.Windows.MessageBox;
 
 namespace CadAddinManager.Command;
 

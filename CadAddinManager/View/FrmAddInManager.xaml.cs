@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using CadAddinManager.ViewModel;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace CadAddinManager.View;
 

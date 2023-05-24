@@ -4,36 +4,38 @@
     <LangVersion>latest</LangVersion>
     <PlatformTarget>x64</PlatformTarget>
     <ImplicitUsings>true</ImplicitUsings>
-    <UseWindowsForms>false</UseWindowsForms>
+    <UseWindowsForms>true</UseWindowsForms>
     <TargetFramework>net48</TargetFramework>
     <Configurations>Debug A21;Debug A22;Debug A23;Debug A24</Configurations>
-    <Configurations>$(Configurations);Release A22;Release A23;Release A24</Configurations>
+    <Configurations>$(Configurations);Release A21;Release A22;Release A23;Release A24</Configurations>
     <RootNamespace>CadAddinManager</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('Release'))">
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>
-    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('A21'))">
     <CADVersion>2021</CADVersion>
+    <CADTrimVersion>21</CADTrimVersion>
     <DefineConstants>$(DefineConstants);A21</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('A22'))">
     <CADVersion>2022</CADVersion>
+    <CADTrimVersion>22</CADTrimVersion>
     <DefineConstants>$(DefineConstants);A22</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('A23'))">
     <CADVersion>2023</CADVersion>
+    <CADTrimVersion>23</CADTrimVersion>
     <DefineConstants>$(DefineConstants);A23</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('A24'))">
     <CADVersion>2024</CADVersion>
+    <CADTrimVersion>24</CADTrimVersion>
     <DefineConstants>$(DefineConstants);A24</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
@@ -49,7 +51,7 @@
     <None Remove="Resources\folder.png" />
     <Page Remove="en-US\AddinManagerRibbon.xaml" />
     <None Update="PackageContents.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -125,13 +127,20 @@
     </PackageReference>
     <PackageReference Include="Mono.Cecil" Version="0.11.4" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="WindowsFormsIntegration" />
-  </ItemGroup>
-  
-  <PropertyGroup>
-    <PostBuildEvent>powershell -NoProfile -ExecutionPolicy Unrestricted $(SolutionDir)CadAddinManager\postbuild.ps1 -Configuration '$(Configuration)' -SolutionDir '$(SolutionDir)' -ProjectDir '$(ProjectDir)'</PostBuildEvent>
-  </PropertyGroup>
+<!--  <PropertyGroup>-->
+<!--    <PostBuildEvent>powershell -NoProfile -ExecutionPolicy Unrestricted $(SolutionDir)CadAddinManager\postbuild.ps1 -Configuration '$(Configuration)' -SolutionDir '$(SolutionDir)' -ProjectDir '$(ProjectDir)'</PostBuildEvent>-->
+<!--  </PropertyGroup>-->
+  <Target Name="CopyFiles" AfterTargets="CoreBuild" Condition="$(Configuration.Contains('Debug'))" >
+    <ItemGroup>
+      <XmlItem Include="$(ProjectDir)*.xml" />
+      <AddinItem Include="$(TargetDir)*.*" />
+    </ItemGroup>
+    <PropertyGroup>
+      <RootDir>C:\ProgramData\Autodesk\ApplicationPlugins\$(AssemblyName).bundle\</RootDir>
+    </PropertyGroup>
+        <Message Text="Copy files to Addin folder" Importance="high" />
+    <Copy SourceFiles="@(XmlItem)" DestinationFolder="$(RootDir)" />
+    <Copy SourceFiles="@(AddinItem)" DestinationFolder="$(RootDir)$(CADTrimVersion)\%(RecursiveDir)" />
+    
+  </Target>
 </Project>

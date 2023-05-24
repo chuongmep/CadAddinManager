@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using CadAddinManager.Model;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
+using MessageBox = System.Windows.MessageBox;
 
 namespace CadAddinManager.ViewModel;
 

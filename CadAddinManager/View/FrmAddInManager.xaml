@@ -213,6 +213,7 @@
                     </control:ExtendedTreeView>
                 </TabItem>
                 <TabItem
+                    FontSize="14"
                     Foreground="SteelBlue"
                     Header="Listener"
                     IsSelected="{Binding IsTabLogSelected}"

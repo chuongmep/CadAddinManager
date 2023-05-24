@@ -4,6 +4,8 @@ using System.Text;
 using System.Windows;
 using CadAddinManager.Model;
 using Microsoft.Win32;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace CadAddinManager.View;
 
