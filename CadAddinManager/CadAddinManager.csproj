@@ -6,7 +6,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <UseWindowsForms>false</UseWindowsForms>
     <TargetFramework>net48</TargetFramework>
-    <Configurations>Debug A22;Debug A23;Debug A24</Configurations>
+    <Configurations>Debug A21;Debug A22;Debug A23;Debug A24</Configurations>
     <Configurations>$(Configurations);Release A22;Release A23;Release A24</Configurations>
     <RootNamespace>CadAddinManager</RootNamespace>
   </PropertyGroup>
@@ -20,9 +20,21 @@
     <DebugType>none</DebugType>
     <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('A21'))">
+    <CADVersion>2021</CADVersion>
+    <DefineConstants>$(DefineConstants);A21</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('A22'))">
+    <CADVersion>2022</CADVersion>
+    <DefineConstants>$(DefineConstants);A22</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('A23'))">
     <CADVersion>2023</CADVersion>
     <DefineConstants>$(DefineConstants);A23</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('A24'))">
+    <CADVersion>2024</CADVersion>
+    <DefineConstants>$(DefineConstants);A24</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <Version>$(CADVersion)</Version>

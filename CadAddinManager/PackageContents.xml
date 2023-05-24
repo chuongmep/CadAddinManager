@@ -4,7 +4,7 @@
                     ProductType="Application"
                     Name="CadAddinManager">
   <RuntimeRequirements SeriesMin="15.0"
-                       SeriesMax="25.0"
+                       SeriesMax="26.0"
                     Platform="AutoCAD|AutoCAD*"
                     OS="Win32|Win64" />
   <Components>
