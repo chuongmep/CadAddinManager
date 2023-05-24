@@ -5,34 +5,41 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:CadAddinManager.ViewModel"
+    d:DataContext="{d:DesignInstance viewModel:LogControlViewModel}"
     d:DesignHeight="350"
     d:DesignWidth="350"
     Background="White"
-    d:DataContext="{d:DesignInstance viewModel:LogControlViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Style TargetType="ListViewItem">
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                </Trigger>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Foreground" Value="Red" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+
+        <ResourceDictionary>
+            <Style TargetType="ListViewItem">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Foreground" Value="Red" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!--  Load this specific theme because the Aero theme for CheckBox has issues.  -->
+            <ResourceDictionary.MergedDictionaries>
+                <!--<ResourceDictionary Source="/PresentationFramework.Luna;component/themes/Luna.NormalColor.xaml" />-->
+                <ResourceDictionary Source="/PresentationFramework.Royale;V3.0.0.0;31bf3856ad364e35;component\themes\royale.normalcolor.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="5,5,5,5" x:Name="ctlList">
+    <Grid x:Name="ctlList">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="25"/>
+            <RowDefinition />
+            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <ListBox
             x:Name="listBox_LogMessages"
             FontFamily="{Binding DisplayFontFamily}"
-            SelectionMode="Extended"
             ItemsSource="{Binding MessageList}"
-            >
+            SelectionMode="Extended">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock
@@ -43,14 +50,19 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.CommandBindings>
-                <CommandBinding Command="ApplicationCommands.Copy"
-                                CanExecute="RightClickCopyCmdCanExecute" Executed="RightClickCopyCmdExecuted" />
+                <CommandBinding
+                    CanExecute="RightClickCopyCmdCanExecute"
+                    Command="ApplicationCommands.Copy"
+                    Executed="RightClickCopyCmdExecuted" />
             </ListBox.CommandBindings>
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="Copy">
                         <MenuItem.CommandBindings>
-                            <CommandBinding Command="ApplicationCommands.Copy" CanExecute="RightClickCopyCmdCanExecute" Executed="RightClickCopyCmdExecuted" />
+                            <CommandBinding
+                                CanExecute="RightClickCopyCmdCanExecute"
+                                Command="ApplicationCommands.Copy"
+                                Executed="RightClickCopyCmdExecuted" />
                         </MenuItem.CommandBindings>
                     </MenuItem>
                 </ContextMenu>
@@ -58,26 +70,24 @@
         </ListBox>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="0.3*" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Row="0">
-                <!-- <CheckBox -->
-                <!--     Margin="5,0,5,0" -->
-                <!--     VerticalAlignment="Center" -->
-                <!--     Content="Revit Events" -->
-                <!--     IsEnabled="False" -->
-                <!--     IsChecked="{Binding WatchRevitEventCommand}" /> -->
+                <!--  <CheckBox  -->
+                <!--  Margin="5,0,5,0"  -->
+                <!--  VerticalAlignment="Center"  -->
+                <!--  Content="Revit Events"  -->
+                <!--  IsEnabled="False"  -->
+                <!--  IsChecked="{Binding WatchRevitEventCommand}" />  -->
             </DockPanel>
             <Button
-                Grid.Column="1"
-                Width="80"
-                Background="Azure"
+                Grid.Column="0"
                 VerticalAlignment="Center"
-                Content="Clear Output"
                 Command="{Binding ClearLogCommand}"
+                Content="Clear Output"
+                FontSize="11"
                 Foreground="SteelBlue"
-                Style="{x:Null}"
                 ToolTip="Clear all result listener" />
         </Grid>
     </Grid>
