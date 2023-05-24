@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
-using File = System.IO.File;
 
 
 const string BundleName = "CadAddinManager.bundle";
@@ -17,7 +14,7 @@ string installationDir = Path.Combine(@"C:\ProgramData\\Autodesk\\ApplicationPlu
 const string projectName = "CadAddinManager";
 const string outputName = "CadAddinManager";
 const string outputDir = "output";
-const string version = "1.0.9";
+const string version = "2.0.0";
 var fileName = new StringBuilder().Append(outputName).Append("-").Append(version);
 var project = new Project
 {
