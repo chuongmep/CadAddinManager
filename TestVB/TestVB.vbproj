@@ -3,14 +3,23 @@
     <PropertyGroup>
         <RootNamespace>TestVB</RootNamespace>
         <TargetFramework>net48</TargetFramework>
-        <Configurations>Debug A23</Configurations>
+        <Configurations>Debug A21;Debug A22;Debug A23;Debug A24</Configurations>
         <PlatformTarget>x64</PlatformTarget>
-        <Configurations>$(Configurations);Release A20;Release A21;Release A22;Release A23</Configurations>
+        <Configurations>$(Configurations);Release A20;Release A21;Release A22;Release A23;Release A24</Configurations>
         <UseWindowsForms>true</UseWindowsForms>
         <UseWpf>true</UseWpf>
     </PropertyGroup>
+    <PropertyGroup Condition="$(Configuration.Contains('A21'))">
+        <CADVersion>2021</CADVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="$(Configuration.Contains('A22'))">
+        <CADVersion>2022</CADVersion>
+    </PropertyGroup>
     <PropertyGroup Condition="$(Configuration.Contains('A23'))">
         <CADVersion>2023</CADVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="$(Configuration.Contains('A24'))">
+        <CADVersion>2024</CADVersion>
     </PropertyGroup>
     <PropertyGroup>
         <Version>$(CADVersion)</Version>
