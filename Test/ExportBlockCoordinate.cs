@@ -33,6 +33,8 @@ public class ExportBlockCoordinate
         SaveFileDialog saveFileDialog = new SaveFileDialog();
         saveFileDialog.Filter = "CSV Files (*.csv)|*.csv";
         saveFileDialog.Title = "Save Block Information";
+        // save file name with current datetime 
+        saveFileDialog.FileName = $"BlockCoordinate_{DateTime.Now.ToString("yyyyMMddHHmmss")}";
         DialogResult dialogResult = saveFileDialog.ShowDialog();
 
         if (dialogResult != DialogResult.OK)
