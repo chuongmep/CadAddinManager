@@ -55,7 +55,7 @@ public class ExportBlockCoordinate
             using (StreamWriter writer = new StreamWriter(filePath))
             {
                 // Write the CSV header
-                writer.WriteLine("Block Name,X,Y,Z,Rotation");
+                writer.WriteLine("Block Name,Anonymous Name,X,Y,Z,Rotation");
 
                 // Iterate through all the entities in the current space
                 foreach (ObjectId entityId in spaceRecord)
@@ -65,11 +65,27 @@ public class ExportBlockCoordinate
                     // Check if the entity is a block reference and on the specified layer
                     if (entity is BlockReference blockRef && blockRef.Layer.Equals(layerName, StringComparison.OrdinalIgnoreCase))
                     {
-                        string blockName = blockRef.Name;
-                        Point3d location = blockRef.Position;
-                        double rotation = blockRef.Rotation;
-                        // Write the block information to the CSV file
-                        writer.WriteLine($"{blockName},{location.X},{location.Y},{location.Z},{rotation}");
+                        string AnonymousName = String.Empty;
+                        // Get name of anonymous block
+                        if (blockRef.IsDynamicBlock)
+                        {
+                            BlockTableRecord? blockTableRecord = tr.GetObject(blockRef.DynamicBlockTableRecord, OpenMode.ForRead) as BlockTableRecord;
+                            AnonymousName = blockTableRecord?.Name?? String.Empty;
+                            string blockName = blockRef.Name;
+                            Point3d location = blockRef.Position;
+                            double rotation = ToDeg(blockRef.Rotation);
+                            // Write the block information to the CSV file
+                            writer.WriteLine($"{blockName},{AnonymousName},{location.X},{location.Y},{location.Z},{rotation}");
+                            editor.WriteMessage(blockName);
+                        }
+                        else
+                        {
+                            string blockName = blockRef.Name;
+                            Point3d location = blockRef.Position;
+                            double rotation = ToDeg(blockRef.Rotation);
+                            // Write the block information to the CSV file
+                            writer.WriteLine($"{blockName},{AnonymousName},{location.X},{location.Y},{location.Z},{rotation}");
+                        }
                     }
                 }
             }
@@ -79,5 +95,9 @@ public class ExportBlockCoordinate
         editor.WriteMessage($"\nBlock information exported to: {filePath}");
         Process.Start(filePath);
 
+    }
+    double ToDeg(double rad)
+    {
+        return rad * (180.0 / Math.PI);
     }
 }
