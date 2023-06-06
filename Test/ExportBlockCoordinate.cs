@@ -55,7 +55,7 @@ public class ExportBlockCoordinate
             using (StreamWriter writer = new StreamWriter(filePath))
             {
                 // Write the CSV header
-                writer.WriteLine("Block Name,Anonymous Name,X,Y,Z,Rotation");
+                writer.WriteLine("Anonymous Name,Block Name,X,Y,Z,Rotation");
 
                 // Iterate through all the entities in the current space
                 foreach (ObjectId entityId in spaceRecord)
