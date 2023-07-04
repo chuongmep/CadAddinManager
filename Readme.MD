@@ -205,6 +205,8 @@ Thanks for providing a free All product IDE for this project.
 
 - [Ribbon not show when open startup Autocad or Civil3d](https://github.com/chuongmep/CadAddinManager/wiki/Fix-Problem-Ribbon-Not-Show).
 
+- Cad Add-in Manager current not support for some product custom of Autocad like **CadMEP** or **Advance steel**.
+
 ## Learning Resources
 
 - <a href="https://adndevblog.typepad.com/autocad/" target="_blank">ADN Dev Blog</a>
