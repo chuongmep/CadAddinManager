@@ -11,6 +11,7 @@
 <img src="https://img.shields.io/twitter/follow/chuongmep?style=social&logo=twitter"
 alt="follow on Twitter"></a>
 
+![](pic/CadAddinManagerBackground.png)
 ## Summary
 
 ![AddinManager](pic/Addin.png)
