@@ -1,4 +1,7 @@
 # Changelog
+- 2023-04-28 **2.0.2**
+  - Add support Autocad 2025
+  - Add support Civil3D 2025
 - 2023-05-24 **2.0.0**
   - Fixed conflict load assembly version 2022.
   - Separate load assembly for each version.
