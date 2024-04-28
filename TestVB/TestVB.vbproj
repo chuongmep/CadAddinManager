@@ -27,7 +27,6 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <Description>A Project Support for developer in Autocad And Civil3D </Description>
         <PublishSingleFile>true</PublishSingleFile>
-        <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Chuongmep.Acad.Api.accoremgd" Version="$(CADVersion).*" />

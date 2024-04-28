@@ -8,8 +8,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWpf>true</UseWpf>
-    <Configurations>Debug A21;Debug A22;Debug A23;Debug A24</Configurations>
-    <Configurations>$(Configurations);Release A20;Release A21;Release A22;Release A23;Release A24</Configurations>
+    <Configurations>Debug A21;Debug A22;Debug A23;Debug A24;Debug A25</Configurations>
+    <Configurations>$(Configurations);Release A20;Release A21;Release A22;Release A23;Release A24;Release A25</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('A20'))">
     <CADVersion>2020</CADVersion>
@@ -31,13 +31,17 @@
     <CADVersion>2024</CADVersion>
     <DefineConstants>$(DefineConstants);A24</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('A25'))">
+    <CADVersion>2025</CADVersion>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <DefineConstants>$(DefineConstants);A25</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup>
     <Version>$(CADVersion)</Version>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Description>A Project Support for developer in Autocad And Civil3D </Description>
     <PublishSingleFile>true</PublishSingleFile>
-    <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Chuongmep.Acad.Api.acmgd" Version="$(CADVersion).*" />

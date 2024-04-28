@@ -13,10 +13,10 @@ public class AddInManagerManual : ICadCommand
     [CommandMethod("AddInManagerManual",CommandFlags.Session)]
     public override void Execute()
     {
-        Debug.Listeners.Clear();
+        Trace.Listeners.Clear();
         Trace.Listeners.Clear();
         CodeListener codeListener = new CodeListener();
-        Debug.Listeners.Add(codeListener);
+        Trace.Listeners.Add(codeListener);
         AddinManagerBase.Instance.ExecuteCommand(false);
     }
 }
