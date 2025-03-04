@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ApplicationPackage SchemaVersion="1.0"
-                    AutodeskProduct="CadAddinManager"
+                    AutodeskProduct="AutoCAD"
                     ProductType="Application"
                     Name="CadAddinManager">
   <Components>
