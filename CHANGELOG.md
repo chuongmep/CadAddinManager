@@ -1,4 +1,6 @@
 # Changelog
+- 2025-03-05 **2.0.4**
+  - Fix issue assembly code loaded raised e duplicate message in AutoCAD 2025
 - 2025-03-04 **2.0.3**
   - Fix issue can't load dependencies into AutoCAD 2025
   - Allow use load assembly context and unload assembly A25
