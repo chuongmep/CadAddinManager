@@ -1,4 +1,7 @@
 # Changelog
+- 2025-03-04 **2.0.3**
+  - Fix issue can't load dependencies into AutoCAD 2025
+  - Allow use load assembly context and unload assembly A25
 - 2023-04-28 **2.0.2**
   - Add support Autocad 2025
   - Add support Civil3D 2025
