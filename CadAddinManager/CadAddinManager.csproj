@@ -43,6 +43,7 @@
     <CADTrimVersion>25</CADTrimVersion>
     <TargetFramework>net8.0-windows</TargetFramework>
     <DefineConstants>$(DefineConstants);A25</DefineConstants>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -132,7 +133,7 @@
     <PackageReference Include="Chuongmep.Acad.Api.AdWindows" Version="$(CADVersion).*">
       <ExcludeAssets>runtime </ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="Mono.Cecil" Version="0.11.4" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.4"/>
   </ItemGroup>
   <PropertyGroup>
     <StartAction>Program</StartAction>

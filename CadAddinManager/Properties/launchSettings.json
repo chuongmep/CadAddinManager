@@ -11,6 +11,10 @@
     "Cad2024": {
       "commandName": "Executable",
       "executablePath": "C:\\Program Files\\Autodesk\\AutoCAD 2024\\acad.exe"
+    },
+    "Cad2025": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Autodesk\\AutoCAD 2025\\acad.exe"
     }
   }
 }

@@ -8,6 +8,7 @@ using Autodesk.AutoCAD.Runtime;
 using CadAddinManager.Model;
 using CadAddinManager.View;
 using CadAddinManager.ViewModel;
+using RevitAddinManager.Model;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 using Exception = System.Exception;
 using MessageBox = System.Windows.MessageBox;
@@ -39,7 +40,74 @@ public sealed class AddinManagerBase
     }
 
 
+#if A25
     public void RunActiveCommand()
+    {
+        AssemLoader assemLoader = new AssemLoader();
+        var filePath = _activeCmd.FilePath;
+        if (!File.Exists(filePath))
+        {
+            MessageBox.Show("File not found: " + filePath, DefaultSetting.AppName, MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            return;
+        }
+        var alc = new AssemblyLoadContext(filePath);
+        Stream stream = null;
+        try
+        {
+            
+            
+            stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            Assembly assembly = alc.LoadFromStream(stream);
+            //var assembly = assemLoader.LoadAddinsToTempFolder(filePath, false);
+            WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
+            Type[] types = assembly.GetTypes();
+            foreach (Type type in types)
+            {
+                List<MethodInfo> methodInfos = type.GetMethods().ToList();
+                foreach (MethodInfo methodInfo in methodInfos)
+                {
+                    CommandMethodAttribute commandAtt = (CommandMethodAttribute)methodInfo
+                        .GetCustomAttributes(typeof(CommandMethodAttribute), false)
+                        .FirstOrDefault();
+                    string fullName = string.Join(".", methodInfo.DeclaringType.Name, methodInfo.Name);
+                    if (commandAtt != null && fullName == Instance.ActiveCmdItem.FullClassName)
+                    {
+                        Invoke(methodInfo);
+                        alc.Unload();
+                    }
+                }
+            }
+            int counter = 0;
+            for (counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
+            {
+                alc = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            stream.Close();
+        }
+        catch (Exception e)
+        {
+            Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage(e.ToString());
+            alc?.Unload();
+            WeakReference alcWeakRef = new WeakReference(alc, trackResurrection: true);
+            for (int counter = 0; alcWeakRef.IsAlive && (counter < 10); counter++)
+            {
+                alc = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            stream?.Close();
+        }
+        // finally
+        // {
+        //     assemLoader.UnhookAssemblyResolve();
+        //     assemLoader.CopyGeneratedFilesBack();
+        // }
+    }
+#else
+     public void RunActiveCommand()
     {
         AssemLoader assemLoader = new AssemLoader();
         var filePath = _activeCmd.FilePath;
@@ -85,6 +153,8 @@ public sealed class AddinManagerBase
             assemLoader.CopyGeneratedFilesBack();
         }
     }
+#endif
+
 
     void Invoke(MethodInfo methodInfo)
     {
