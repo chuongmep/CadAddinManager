@@ -1,14 +1,11 @@
 ﻿using System.IO;
-using System.Net;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.Windows;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.Runtime;
 using CadAddinManager.Model;
 using CadAddinManager.View;
 using CadAddinManager.ViewModel;
-using RevitAddinManager.Model;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 using Exception = System.Exception;
 using MessageBox = System.Windows.MessageBox;
