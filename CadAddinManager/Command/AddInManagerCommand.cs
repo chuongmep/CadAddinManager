@@ -26,7 +26,15 @@ public class AddInManagerFaceLess  : ICadCommand
     [Autodesk.AutoCAD.Runtime.CommandMethod("AddInManagerFaceLess",CommandFlags.Session)]
     public override void Execute()
     {
-        AddinManagerBase.Instance.ExecuteCommand(true);
+        try
+        {
+            AddinManagerBase.Instance.ExecuteCommand(true);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.ToString());
+            Trace.WriteLine(e.Message);
+        }
     }
 }
 
