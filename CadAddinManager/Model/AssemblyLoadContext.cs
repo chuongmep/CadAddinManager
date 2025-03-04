@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace RevitAddinManager.Model;
+namespace CadAddinManager.Model;
 
 class AssemblyLoadContext : System.Runtime.Loader.AssemblyLoadContext
 {
