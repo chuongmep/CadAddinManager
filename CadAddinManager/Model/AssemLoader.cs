@@ -107,6 +107,10 @@ public class AssemLoader
                             {
                                 int count = customAttribute.ConstructorArguments.Count;
                                 CustomAttribute newAttr = null;
+                                if (count == 4)
+                                {
+                                    newAttr = CreateCustomAttribute4Type(customAttribute);
+                                }
                                 if (count == 3)
                                 {
                                    newAttr = CreateCustomAttribute3Type(customAttribute);
@@ -161,6 +165,28 @@ public class AssemLoader
         directoryInfo3.Create();
         string fileAssemblyTemp = Path.Combine(directoryInfo3.FullName, Path.GetFileName(originalFilePath));
         return fileAssemblyTemp;
+    }
+    private CustomAttribute CreateCustomAttribute4Type(CustomAttribute customAttribute)
+    {
+        string valueAttribute = ResolveValueAttribute(customAttribute);
+        return new CustomAttribute(customAttribute.Constructor)
+        { 
+            ConstructorArguments = 
+            {
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[0].Type, 
+                    valueAttribute),
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[1].Type, 
+                    customAttribute.ConstructorArguments[1].Value),
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[2].Type, 
+                    customAttribute.ConstructorArguments[2].Value),
+                new CustomAttributeArgument(
+                    customAttribute.ConstructorArguments[3].Type, 
+                    customAttribute.ConstructorArguments[3].Value),
+            }
+        };  
     }
     private CustomAttribute CreateCustomAttribute3Type(CustomAttribute customAttribute)
     {
