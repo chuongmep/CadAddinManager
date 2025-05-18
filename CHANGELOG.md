@@ -1,4 +1,6 @@
 # Changelog
+- 2025-05-18 **2.0.5**
+  - Fixed command attribute flag with 4 type arguments
 - 2025-03-05 **2.0.4**
   - Fix issue assembly code loaded raised e duplicate message in AutoCAD 2025
 - 2025-03-04 **2.0.3**
