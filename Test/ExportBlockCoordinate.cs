@@ -71,6 +71,12 @@ public class ExportBlockCoordinate
                         {
                             BlockTableRecord? blockTableRecord = tr.GetObject(blockRef.DynamicBlockTableRecord, OpenMode.ForRead) as BlockTableRecord;
                             AnonymousName = blockTableRecord?.Name?? String.Empty;
+                            DynamicBlockReferencePropertyCollection pc = blockRef.DynamicBlockReferencePropertyCollection;
+                            foreach (DynamicBlockReferenceProperty blockReferenceProperty in pc)
+                            {
+                                editor.WriteMessage($"name:{blockReferenceProperty.PropertyName}:value{blockReferenceProperty.Value}");
+                            }
+
                             string blockName = blockRef.Name;
                             Point3d location = blockRef.Position;
                             double rotation = ToDeg(blockRef.Rotation);
