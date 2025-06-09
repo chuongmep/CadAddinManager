@@ -80,7 +80,8 @@ public class AssemLoader
         else stringBuilder.Append("-Executing-");
         tempFolder = FileUtils.CreateTempFolder(stringBuilder.ToString());
         string fileAssemblyTemp = ResolveDuplicateMethod(originalFilePath);
-        var assembly = CopyAndLoadAddin(fileAssemblyTemp, parsingOnly);
+		refedFolders.Add(Path.GetDirectoryName(originalFilePath));
+		var assembly = CopyAndLoadAddin(fileAssemblyTemp, parsingOnly);
         if (assembly == null || !IsAPIReferenced(assembly))
         {
             return null;
@@ -134,7 +135,7 @@ public class AssemLoader
         }
         string fileAssemblyTemp = SaveAssemblyModifyToTemp(originalFilePath);
         ass.Write(fileAssemblyTemp);
-        return fileAssemblyTemp;
+		return fileAssemblyTemp;
     }
     public static AssemblyDefinition GetAssemblyDef(string assemblyPath)
     {
