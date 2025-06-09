@@ -134,7 +134,7 @@ public class AssemLoader
             }
         }
         string fileAssemblyTemp = SaveAssemblyModifyToTemp(originalFilePath);
-        ass.Write(fileAssemblyTemp);
+		ass.Write(fileAssemblyTemp, new WriterParameters() { WriteSymbols = true });
 		return fileAssemblyTemp;
     }
     public static AssemblyDefinition GetAssemblyDef(string assemblyPath)
