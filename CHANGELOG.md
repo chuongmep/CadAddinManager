@@ -1,4 +1,6 @@
 # Changelog
+- 2025-06-12 **2.0.6**
+  - Allow Debug with .pdb [#18](https://github.com/chuongmep/CadAddinManager/pull/18)
 - 2025-05-18 **2.0.5**
   - Fixed command attribute flag with 4 type arguments
 - 2025-03-05 **2.0.4**
