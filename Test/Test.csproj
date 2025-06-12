@@ -56,5 +56,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="ZoomToObject.cs">
+      <DependentUpon>XrefPathExtractor.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
 </Project>

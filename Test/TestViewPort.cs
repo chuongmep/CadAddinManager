@@ -98,6 +98,8 @@ public class TestViewPort
                 tr.Commit();
             }
 
+
+            int totalCount = 0;
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
                 BlockTableRecord blockTableRecord = (BlockTableRecord)tr.GetObject(SymbolUtilityServices.GetBlockModelSpaceId(db),
@@ -121,11 +123,12 @@ public class TestViewPort
                         if (ent is BlockReference block)
                         {
                             ed.WriteMessage($"\nEntity Block in Viewport: {entId.Handle} ({block.Name})");
+                            totalCount += 1;
                         }
 
                     }
                 }
-
+                ed.WriteMessage($"Total block inside: {totalCount}");
                 tr.Commit();
             }
         }

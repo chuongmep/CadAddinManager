@@ -8,6 +8,7 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
+using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 using CadApp = Autodesk.AutoCAD.ApplicationServices.Application;
 namespace Test;
 
@@ -36,7 +37,7 @@ public class ExtractFileFromResources
     [CommandMethod("ExtractFile")]
     public static void RunDocumentCommand()
     {
-        var dwg = CadApp.DocumentManager.MdiActiveDocument;
+        var dwg = Application.DocumentManager.MdiActiveDocument;
         var ed = dwg.Editor;
 
         try
@@ -46,7 +47,7 @@ public class ExtractFileFromResources
             {
                 //Use this drawing file from AutoCAD's temp file location
                 // such as insert this block file into current drawing
-                CadApp.ShowAlertDialog(
+                Application.ShowAlertDialog(
                     "Block file saved in project resources has been extracted!");
 
                 File.Delete(blkFile);
@@ -69,8 +70,8 @@ public class ExtractFileFromResources
             (string)preferences.Files.TempFilePath + "\\" + resourceName + ".dwg";
         try
         {
-            ResourceManager ResourceManager = new ResourceManager("Test.g.resources", Assembly.GetExecutingAssembly());
-            var bytes = (byte[])ResourceManager.GetObject(resourceName);
+            ResourceManager resourceManager = new ResourceManager("Test.g.resources", Assembly.GetExecutingAssembly());
+            byte[]? bytes = (byte[])resourceManager.GetObject(resourceName);
             if (File.Exists(filePathName)) File.Delete(filePathName);
             using (var stream = new FileStream(filePathName, FileMode.Create, FileAccess.Write))
             {
@@ -112,9 +113,9 @@ public class ExtractFileFromResources
                     BlockReference ent = new BlockReference(loc, btr.ObjectId);
                     ent.ScaleFactors = scl;
 
-                    BlockTableRecord modelspace =
+                    BlockTableRecord? modelspace =
                         tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
-                    modelspace.AppendEntity(ent);
+                    modelspace!.AppendEntity(ent);
                     tr.AddNewlyCreatedDBObject(ent, true);
 
                     retId = ent.ObjectId;
