@@ -1,5 +1,8 @@
 # Changelog
-
+- 2026-03-26 **2.0.8**
+  - Fixed issues with ci/cd Visual Studio 2026
+  - Improved installation new .NET 10.0 runtime dependencies
+  - Updated documentation for new version support
 - 2026-03-26 **2.0.7**
   - Add support AutoCAD 2026 (.NET 8.0)
   - Add support AutoCAD 2027 (.NET 10.0)
