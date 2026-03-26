@@ -10,8 +10,8 @@ on:
 
 jobs:
   windows:
-    name: windows-latest
-    runs-on: windows-latest
+    name: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -21,5 +21,7 @@ jobs:
           dotnet-version: '10.0.x'
       - name: Install Nuke
         run: dotnet tool install Nuke.GlobalTool --global
+      - name: Make build script executable
+        run: chmod +x ./.nuke/build.sh
       - name: Run Nuke Build
-        run: ./.nuke/build.cmd --GitHubToken ${{ secrets.GITHUB_TOKEN }}
+        run: ./.nuke/build.sh --GitHubToken ${{ secrets.GITHUB_TOKEN }}
