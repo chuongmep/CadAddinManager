@@ -34,7 +34,7 @@ internal partial class Build : NukeBuild
     //        if (!File.Exists(CustomMsBuildPath)) throw new Exception($"Missing file: {CustomMsBuildPath}. Change the path to the build platform or install Visual Studio.");
     //        return CustomMsBuildPath;
     //    });
-    private static readonly string MsBuildPath = @"C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe";
+    private static readonly string MsBuildPath = @"C:\Program Files\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin\MSBuild.exe";
     public static int Main() => Execute<Build>(x => x.Cleaning);
 
     private List<string> GetConfigurations(params string[] startPatterns)
