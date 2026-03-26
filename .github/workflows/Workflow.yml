@@ -10,30 +10,10 @@ on:
 
 jobs:
   windows:
-    name: windows-2022
-    runs-on: windows-2022
+    name: windows-2025-vs2026
+    runs-on: windows-2025-vs2026
     steps:
             # 6. Install Visual Studio 2026 Build Tools
-      - name: Install Visual Studio 2026 Build Tools
-        shell: pwsh
-        run: |
-          Write-Host "Installing VS 2026 Build Tools..."
-          choco install visualstudio2026buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --includeRecommended --quiet" -y --ignore-package-exit-codes=3010
-          Write-Host "VS 2026 Build Tools installation completed"
-
-      # 7. Build the solution (matrix handles Debug/Release)
-      - name: Build project (${{ matrix.config }}, x64, C++latest)
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\Common7\Tools\VsDevCmd.bat"
-          echo Building solution (${{ matrix.config }}, x64) with C++latest standard...
-          echo Using solution file: %SOLUTION_FILE%
-          msbuild /m ^
-            /p:Configuration=${{ matrix.config }} ^
-            /p:Platform=x64 ^
-            /p:LanguageStandard=stdcpplatest ^
-            /fl /flp:logfile=msbuild.log ^
-            %SOLUTION_FILE%
       - name: Checkout
         uses: actions/checkout@v1
       - name: Run Nuke Build
