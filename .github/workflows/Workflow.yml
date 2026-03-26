@@ -10,8 +10,8 @@ on:
 
 jobs:
   windows:
-    name: windows-latest
-    runs-on: windows-latest
+    name: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
