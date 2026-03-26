@@ -24,7 +24,7 @@ var project = new Project
     OutDir = outputDir,
     Platform = Platform.x64,
     Description = "Project Support Developer Work With Autocad And Civil3D API",
-    UI = WUI.WixUI_Minimal,
+    UI = WUI.WixUI_InstallDir,
     Version = new Version(version),
     OutFileName = fileName.ToString(),
     InstallScope = InstallScope.perUser,
@@ -46,6 +46,7 @@ var project = new Project
 };
 
 MajorUpgrade.Default.AllowSameVersionUpgrades = true;
+project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
 project.BuildMsi();
 
 WixEntity[] GenerateWixEntities()
