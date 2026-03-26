@@ -10,8 +10,8 @@ on:
 
 jobs:
   windows:
-    name: windows-2025
-    runs-on: windows-2025
+    name: windows-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
