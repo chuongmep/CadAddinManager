@@ -22,8 +22,8 @@ internal partial class Build
                          .EnableRestore();
                      
                      // Only set custom MSBuild path if it's available (local builds)
-                     if (!string.IsNullOrEmpty(MsBuildPath.Value))
-                         settings = settings.SetProcessToolPath(MsBuildPath.Value);
+                     if (!string.IsNullOrEmpty(MsBuildPath))
+                         settings = settings.SetProcessToolPath(MsBuildPath);
                      
                      return settings;
                  });
