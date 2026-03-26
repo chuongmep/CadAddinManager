@@ -12,7 +12,7 @@ using File = WixSharp.File;
 
 const string BundleName = "CadAddinManager.bundle";
 // string rootDirectory = Path.GetPathRoot(Environment.SystemDirectory);
-string installationDir = Path.Combine(@"C:\ProgramData\\Autodesk\\ApplicationPlugins", BundleName);
+string installationDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Autodesk\ApplicationPlugins", BundleName);
 const string projectName = "CadAddinManager";
 const string outputName = "CadAddinManager";
 const string outputDir = "output";
