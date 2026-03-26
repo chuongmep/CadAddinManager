@@ -10,18 +10,31 @@ on:
 
 jobs:
   windows:
-    name: ubuntu-latest
-    runs-on: ubuntu-latest
+    name: windows-2022
+    runs-on: windows-2022
     steps:
+            # 6. Install Visual Studio 2026 Build Tools
+      - name: Install Visual Studio 2026 Build Tools
+        shell: pwsh
+        run: |
+          Write-Host "Installing VS 2026 Build Tools..."
+          choco install visualstudio2026buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --includeRecommended --quiet" -y --ignore-package-exit-codes=3010
+          Write-Host "VS 2026 Build Tools installation completed"
+
+      # 7. Build the solution (matrix handles Debug/Release)
+      - name: Build project (${{ matrix.config }}, x64, C++latest)
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\Common7\Tools\VsDevCmd.bat"
+          echo Building solution (${{ matrix.config }}, x64) with C++latest standard...
+          echo Using solution file: %SOLUTION_FILE%
+          msbuild /m ^
+            /p:Configuration=${{ matrix.config }} ^
+            /p:Platform=x64 ^
+            /p:LanguageStandard=stdcpplatest ^
+            /fl /flp:logfile=msbuild.log ^
+            %SOLUTION_FILE%
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '10.0.x'
-      - name: Install Nuke
-        run: dotnet tool install Nuke.GlobalTool --global
-      - name: Make build script executable
-        run: chmod +x ./.nuke/build.sh
       - name: Run Nuke Build
-        run: ./.nuke/build.sh --GitHubToken ${{ secrets.GITHUB_TOKEN }}
+        run: ./.nuke/build.cmd --GitHubToken ${{ secrets.GITHUB_TOKEN }}
