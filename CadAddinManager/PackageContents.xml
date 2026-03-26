@@ -97,7 +97,7 @@
         <Command Local="InitAddinManager" Global="InitAddinManager" LoadOnAutoCADStartup="True" StartupCommand="True" />
       </Commands>
     </ComponentEntry>
-    <RuntimeRequirements Platform="AutoCAD*" SeriesMin="R26.0" SeriesMax="R26.0"/>
+    <RuntimeRequirements Platform="AutoCAD*" SeriesMin="R25.1" SeriesMax="R25.1"/>
   </Components>
   <Components>
     <ComponentEntry AppName="CadAddinManager"
@@ -113,6 +113,6 @@
         <Command Local="InitAddinManager" Global="InitAddinManager" LoadOnAutoCADStartup="True" StartupCommand="True" />
       </Commands>
     </ComponentEntry>
-    <RuntimeRequirements Platform="AutoCAD*" SeriesMin="R27.0" SeriesMax="R27.0"/>
+    <RuntimeRequirements Platform="AutoCAD*" SeriesMin="R26.0" SeriesMax="R26.0"/>
   </Components>
 </ApplicationPackage>

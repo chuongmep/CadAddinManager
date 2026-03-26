@@ -163,7 +163,7 @@
       <AddinItem Include="$(TargetDir)*.*" />
     </ItemGroup>
     <PropertyGroup>
-      <RootDir>C:\ProgramData\Autodesk\ApplicationPlugins\$(AssemblyName).bundle\</RootDir>
+      <RootDir>$(APPDATA)\Autodesk\ApplicationPlugins\$(AssemblyName).bundle\</RootDir>
     </PropertyGroup>
         <Message Text="Copy files to Addin folder" Importance="high" />
     <Copy SourceFiles="@(XmlItem)" DestinationFolder="$(RootDir)" />
