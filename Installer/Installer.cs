@@ -12,7 +12,7 @@ using File = WixSharp.File;
 
 const string BundleName = "CadAddinManager.bundle";
 // string rootDirectory = Path.GetPathRoot(Environment.SystemDirectory);
-string installationDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Autodesk\ApplicationPlugins", BundleName);
+string installationDir = Path.Combine(@"%AppDataFolder%", @"Autodesk\ApplicationPlugins", BundleName);
 const string projectName = "CadAddinManager";
 const string outputName = "CadAddinManager";
 const string outputDir = "output";
@@ -24,7 +24,7 @@ var project = new Project
     OutDir = outputDir,
     Platform = Platform.x64,
     Description = "Project Support Developer Work With Autocad And Civil3D API",
-    UI = WUI.WixUI_InstallDir,
+    UI = WUI.WixUI_Minimal,
     Version = new Version(version),
     OutFileName = fileName.ToString(),
     InstallScope = InstallScope.perUser,
@@ -46,7 +46,6 @@ var project = new Project
 };
 
 MajorUpgrade.Default.AllowSameVersionUpgrades = true;
-project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
 project.BuildMsi();
 
 WixEntity[] GenerateWixEntities()

@@ -10,8 +10,8 @@ on:
 
 jobs:
   windows:
-    name: ubuntu-latest
-    runs-on: ubuntu-latest
+    name: windows-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -22,4 +22,4 @@ jobs:
       - name: Install Nuke
         run: dotnet tool install Nuke.GlobalTool --global
       - name: Run Nuke Build
-        run: pwsh ./.nuke/build.ps1 --GitHubToken ${{ secrets.GITHUB_TOKEN }}
+        run: ./.nuke/build.cmd --GitHubToken ${{ secrets.GITHUB_TOKEN }}
