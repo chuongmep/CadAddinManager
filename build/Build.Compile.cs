@@ -12,13 +12,21 @@ internal partial class Build
              var configurations = GetConfigurations(BuildConfiguration, InstallerConfiguration);
              configurations.ForEach(configuration =>
              {
-                 MSBuild(s => s
-                     .SetTargets("Rebuild")
-                     .SetProcessToolPath(MsBuildPath.Value)
-                     .SetConfiguration(configuration)
-                     .SetVerbosity(MSBuildVerbosity.Minimal)
-                     .DisableNodeReuse()
-                     .EnableRestore());
+                 MSBuild(s =>
+                 {
+                     var settings = s
+                         .SetTargets("Rebuild")
+                         .SetConfiguration(configuration)
+                         .SetVerbosity(MSBuildVerbosity.Minimal)
+                         .DisableNodeReuse()
+                         .EnableRestore();
+                     
+                     // Only set custom MSBuild path if it's available (local builds)
+                     if (!string.IsNullOrEmpty(MsBuildPath.Value))
+                         settings = settings.SetProcessToolPath(MsBuildPath.Value);
+                     
+                     return settings;
+                 });
              });
          });
 }
