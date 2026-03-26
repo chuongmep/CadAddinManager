@@ -16,7 +16,7 @@ string installationDir = Path.Combine(@"C:\ProgramData\\Autodesk\\ApplicationPlu
 const string projectName = "CadAddinManager";
 const string outputName = "CadAddinManager";
 const string outputDir = "output";
-const string version = "2.0.6";
+const string version = "2.0.7";
 var fileName = new StringBuilder().Append(outputName).Append("-").Append(version);
 var project = new Project
 {

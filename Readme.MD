@@ -159,7 +159,7 @@ public class DebugTraceTest
 
 Please follow last release at section [Release](https://github.com/chuongmep/CadAddInManager/releases/latest)
 
-Support Autocad or Civil3D Version : 2020, 2021, 2022, 2023, 2024, 2025
+Support Autocad or Civil3D Version : 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027
 ---
 
 ## Guideline

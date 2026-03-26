@@ -21,7 +21,16 @@ internal partial class Build : NukeBuild
                .SetProperty("installationPath")
            );
 
-           if (output.Count > 0) return null;
+           if (output.Count > 0)
+           {
+               var vsPath = output.FirstOrDefault().Text;
+               if (!string.IsNullOrEmpty(vsPath))
+               {
+                   var msbuildPath = Path.Combine(vsPath, "MSBuild", "Current", "Bin", "amd64", "MSBuild.exe");
+                   if (File.Exists(msbuildPath)) return msbuildPath;
+               }
+           }
+           
            if (!File.Exists(CustomMsBuildPath)) throw new Exception($"Missing file: {CustomMsBuildPath}. Change the path to the build platform or install Visual Studio.");
            return CustomMsBuildPath;
        });
@@ -30,15 +39,18 @@ internal partial class Build : NukeBuild
 
     private List<string> GetConfigurations(params string[] startPatterns)
     {
-        var configurations = Solution.Configurations
-            .Select(pair => pair.Key)
+        // Read configurations from solution file
+        var solutionContent = File.ReadAllText(Solution.Path);
+        var configRegex = new Regex(@"^\s*([^|]+)\|([^=]+)\s*=", RegexOptions.Multiline);
+        var matches = configRegex.Matches(solutionContent);
+        
+        var configurations = matches
+            .Cast<Match>()
+            .Select(m => m.Groups[1].Value.Trim())
+            .Distinct()
             .Where(s => startPatterns.Any(s.StartsWith))
-            .Select(s =>
-            {
-                var platformIndex = s.LastIndexOf('|');
-                return s.Remove(platformIndex);
-            })
             .ToList();
+            
         if (configurations.Count == 0) throw new Exception($"Can't find configurations in the solution by patterns: {string.Join(" | ", startPatterns)}.");
         return configurations;
     }

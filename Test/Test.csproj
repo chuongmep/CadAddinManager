@@ -8,8 +8,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWpf>true</UseWpf>
-    <Configurations>Debug A21;Debug A22;Debug A23;Debug A24;Debug A25</Configurations>
-    <Configurations>$(Configurations);Release A20;Release A21;Release A22;Release A23;Release A24;Release A25</Configurations>
+    <Configurations>Debug A21;Debug A22;Debug A23;Debug A24;Debug A25;Debug A26;Debug A27</Configurations>
+    <Configurations>$(Configurations);Release A20;Release A21;Release A22;Release A23;Release A24;Release A25;Release A26;Release A27</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('A20'))">
     <CADVersion>2020</CADVersion>
@@ -35,6 +35,16 @@
     <CADVersion>2025</CADVersion>
     <TargetFramework>net8.0-windows</TargetFramework>
     <DefineConstants>$(DefineConstants);A25</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('A26'))">
+    <CADVersion>2026</CADVersion>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <DefineConstants>$(DefineConstants);A26</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('A27'))">
+    <CADVersion>2027</CADVersion>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <DefineConstants>$(DefineConstants);A27</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <Version>$(CADVersion)</Version>

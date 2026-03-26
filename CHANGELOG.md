@@ -1,4 +1,12 @@
 # Changelog
+
+- 2026-03-26 **2.0.7**
+  - Add support AutoCAD 2026 (.NET 8.0)
+  - Add support AutoCAD 2027 (.NET 10.0)
+  - Add support Civil3D 2026 (.NET 8.0)
+  - Add support Civil3D 2027 (.NET 10.0)
+  - Fixed Nuke build system compatibility for Nuke 10.x
+  - Updated build infrastructure to support Visual Studio 2026
 - 2025-06-12 **2.0.6**
   - Allow Debug with .pdb [#18](https://github.com/chuongmep/CadAddinManager/pull/18)
 - 2025-05-18 **2.0.5**
