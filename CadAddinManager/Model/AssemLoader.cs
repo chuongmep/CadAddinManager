@@ -30,12 +30,22 @@ public class AssemLoader
         copiedFiles = new Dictionary<string, DateTime>();
     }
 
+    private static readonly HashSet<string> SkipCopyBackExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".dll", ".pdb", ".exe"
+    };
+
     public void CopyGeneratedFilesBack()
     {
         var files = Directory.GetFiles(tempFolder, "*.*", SearchOption.AllDirectories);
         if(!files.Any()) return;
         foreach (var text in files)
         {
+            // Never copy compiled assemblies back — they don't change at runtime
+            // and copying them back locks the original files for MSBuild
+            var ext = Path.GetExtension(text);
+            if (SkipCopyBackExtensions.Contains(ext)) continue;
+
             if (copiedFiles.ContainsKey(text))
             {
                 var t = copiedFiles[text];
@@ -93,49 +103,52 @@ public class AssemLoader
     {
         
         // AssemblyDefinition ass = AssemblyDefinition.ReadAssembly(originalFilePath);
-        AssemblyDefinition ass = GetAssemblyDef(originalFilePath);
-        foreach (ModuleDefinition def in ass.Modules)
+        string fileAssemblyTemp;
+        using (AssemblyDefinition ass = GetAssemblyDef(originalFilePath))
         {
-            foreach (TypeDefinition d in def.Types)
+            foreach (ModuleDefinition def in ass.Modules)
             {
-                foreach (MethodDefinition m in d.Methods)
+                foreach (TypeDefinition d in def.Types)
                 {
-                    if (!m.IsConstructor && !m.IsRuntimeSpecialName && m.Name != "Main")
+                    foreach (MethodDefinition m in d.Methods)
                     {
-                        foreach (CustomAttribute customAttribute in m.CustomAttributes)
+                        if (!m.IsConstructor && !m.IsRuntimeSpecialName && m.Name != "Main")
                         {
-                            if (customAttribute.Constructor.DeclaringType.Name == "CommandMethodAttribute")
+                            foreach (CustomAttribute customAttribute in m.CustomAttributes)
                             {
-                                int count = customAttribute.ConstructorArguments.Count;
-                                CustomAttribute newAttr = null;
-                                if (count == 4)
+                                if (customAttribute.Constructor.DeclaringType.Name == "CommandMethodAttribute")
                                 {
-                                    newAttr = CreateCustomAttribute4Type(customAttribute);
+                                    int count = customAttribute.ConstructorArguments.Count;
+                                    CustomAttribute newAttr = null;
+                                    if (count == 4)
+                                    {
+                                        newAttr = CreateCustomAttribute4Type(customAttribute);
+                                    }
+                                    if (count == 3)
+                                    {
+                                       newAttr = CreateCustomAttribute3Type(customAttribute);
+                                    }
+                                    else if (count == 2)
+                                    {
+                                        newAttr = CreateCustomAttribute2Type(customAttribute);
+                                    }
+                                    else if (count == 1)
+                                    {
+                                        newAttr = CreateCustomAttribute1Type(customAttribute);
+                                    }
+                                    m.CustomAttributes.Remove(customAttribute);
+                                    m.CustomAttributes.Add(newAttr);
+                                    break;
                                 }
-                                if (count == 3)
-                                {
-                                   newAttr = CreateCustomAttribute3Type(customAttribute);
-                                }
-                                else if (count == 2)
-                                {
-                                    newAttr = CreateCustomAttribute2Type(customAttribute);
-                                }
-                                else if (count == 1)
-                                {
-                                    newAttr = CreateCustomAttribute1Type(customAttribute);
-                                }
-                                m.CustomAttributes.Remove(customAttribute);
-                                m.CustomAttributes.Add(newAttr);
-                                break;
                             }
                         }
                     }
                 }
             }
+            fileAssemblyTemp = SaveAssemblyModifyToTemp(originalFilePath);
+            ass.Write(fileAssemblyTemp, new WriterParameters() { WriteSymbols = true });
         }
-        string fileAssemblyTemp = SaveAssemblyModifyToTemp(originalFilePath);
-		ass.Write(fileAssemblyTemp, new WriterParameters() { WriteSymbols = true });
-		return fileAssemblyTemp;
+        return fileAssemblyTemp;
     }
     public static AssemblyDefinition GetAssemblyDef(string assemblyPath)
     {
